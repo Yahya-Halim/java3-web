@@ -1,4 +1,4 @@
-<h1><%= "Hello Java 3!" %>
+<h1><%= "Welcome To JavaIII" %>
 </h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
+<a href="users">View Users</a>

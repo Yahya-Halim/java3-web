@@ -1,3 +1,0 @@
-<%--  Additional JavaScript  --%>
-</body>
-</html>
