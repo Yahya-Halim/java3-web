@@ -1,2 +1,4 @@
+<%@ include file="/WEB-INF/bottom-nav.jsp" %>
+<%--  Additional JavaScript  --%>
 </body>
 </html>
