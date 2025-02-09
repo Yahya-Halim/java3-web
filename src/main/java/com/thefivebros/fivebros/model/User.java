@@ -1,5 +1,7 @@
 package com.thefivebros.fivebros.model;
 
+import com.thefivebros.shared.Validators;
+
 import java.time.Instant;
 
 public class User implements Comparable<User> {
@@ -71,7 +73,9 @@ public class User implements Comparable<User> {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if(!Validators.isValidEmail(email)){
+            throw new IllegalArgumentException("Invalid email format");
+        }
     }
 
     public String getPhone() {
@@ -87,6 +91,12 @@ public class User implements Comparable<User> {
     }
 
     public void setPassword(char[] password) {
+        if(password != null) {
+            String passwordString = String.valueOf(password);
+            if(!Validators.isStrongPassword(passwordString)){
+                throw new IllegalArgumentException("Password requires at least 8 characters, and at least 3 of 4: lowercase leter, uppercase letter, number, symbol");
+            }
+        }
         this.password = password;
     }
 

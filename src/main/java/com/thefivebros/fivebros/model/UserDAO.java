@@ -41,4 +41,29 @@ public class UserDAO {
         }
         return list;
     }
+
+    public static User get(String email) {
+        User user = null;
+        try(Connection connection = getConnection()) {
+            CallableStatement cstmt = connection.prepareCall("{call sp_get_user(?)}");
+            cstmt.setString(1, email);
+            ResultSet rs = cstmt.executeQuery();
+            if (rs.next()) {
+                int userId = rs.getInt("user_id");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String phone = rs.getString("phone");
+                char[] password = rs.getString("password").toCharArray();
+                String language = rs.getString("language");
+                String status = rs.getString("status");
+                String privileges = rs.getString("privileges");
+                Instant createdAt = rs.getTimestamp("created_at").toInstant();
+                String timezone = rs.getString("timezone");
+                user = new User(userId, firstName, lastName, email, phone, password, language, status, privileges, createdAt, timezone);
+            }
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
 }
