@@ -76,6 +76,9 @@ public class User implements Comparable<User> {
         if(!Validators.isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email format");
         }
+        this.email = email;
+
+
     }
 
     public String getPhone() {

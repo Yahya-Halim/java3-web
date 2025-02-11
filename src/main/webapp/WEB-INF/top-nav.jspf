@@ -4,7 +4,7 @@
   }
 </style>
 
-<div class="container-fluid">
+
   <header class="d-flex flex-wrap justify-content-between align-items-center py-3 nav-gradient shadow">
     <a href="${appURL}" class="d-flex align-items-center ms-3 text-white text-decoration-none">
       <img src="./images/TFF_Logo.png" alt="Logo" width="32" height="32" class="me-2">
@@ -19,9 +19,22 @@
       <li><a href="#" class="nav-link px-3 text-white">About</a></li>
     </ul>
 
-    <div class="me-3">
-      <button type="button" class="btn btn-outline-light me-2">Login</button>
-      <a href="${appURL}/signup" class="btn btn-light">Sign-up</a>
+
+    <div class="text-end">
+      <c:choose>
+        <c:when test="${empty sessionScope.activeUser}">
+          <button type="button" class="btn btn-outline-light me-2">Login</button>
+          <a href="${appURL}/signup" class="btn btn-light me-4">Sign-up</a>
+        </c:when>
+        <c:otherwise>
+          <a href="#" class="btn btn-outline-light me-2">Sign out</a>
+          <a href="#" class="btn btn-primary">My Profile</a>
+        </c:otherwise>
+      </c:choose>
+
+
     </div>
   </header>
-</div>
+
+
+

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -33,20 +34,19 @@ public class Signup extends HttpServlet {
         boolean errorFound = false;
         try {
             user.setEmail(email);
-
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
+            errorFound = true;
             req.setAttribute("emailError", e.getMessage());
-            errorFound = true;
         }
-        if(UserDAO.get(email) != null){
-            req.setAttribute("emailError", "This user email already exists");
+        if(UserDAO.get(email) != null) {
             errorFound = true;
+            req.setAttribute("emailError", "A user with that email already exists. Please login or reset your password.");
         }
         try {
             user.setPassword(password1.toCharArray());
-        } catch (IllegalArgumentException e) {
-            req.setAttribute("password1Error", e.getMessage());
+        } catch(IllegalArgumentException e) {
             errorFound = true;
+            req.setAttribute("password1Error", e.getMessage());
         }
         if(password2 != null && password2.equals("")) {
             errorFound = true;
@@ -56,12 +56,32 @@ public class Signup extends HttpServlet {
             errorFound = true;
             req.setAttribute("password2Error", "Passwords don't match");
         }
-        if(terms == null || !terms[0].equals("agree")){
+        if(terms == null || !terms[0].equals("agree")) {
             errorFound = true;
-            req.setAttribute("termsError", "You must agree to the terms of service");
-
+            req.setAttribute("termsError", "You must agree to our terms of use");
         }
 
+        if(!errorFound) {
+            user.setPrivileges("user");
+            user.setStatus("active");
+            boolean userAdded = false;
+            try {
+                userAdded = UserDAO.add(user);
+            } catch (RuntimeException e) {
+                req.setAttribute("userAddFail", "User could not be added");
+            }
+            if(userAdded) {
+                user.setPassword(null);
+                HttpSession session = req.getSession(); // get an existing session if one exists
+                session.invalidate(); // remove any existing sessions
+                session = req.getSession(); // create a brand new session
+                session.setAttribute("activeUser", user);
+                session.setAttribute("flashMessageSuccess", "User successfully added");
+
+            }
+        }
+
+        req.setAttribute("pageTitle", "Sign up for an account");
 
         req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
     }

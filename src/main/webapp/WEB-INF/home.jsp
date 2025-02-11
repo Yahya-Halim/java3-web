@@ -13,6 +13,8 @@
       %>
       <h1 class="display-4 fst-italic"><%= featured.get("title") %></h1>
       <p class="lead my-3"><%= featured.get("description") %></p>
+
+
       <p class="lead mb-0"><a href="<%= featured.get("url") %>" class="text-body-emphasis fw-bold">Continue reading...</a></p>
       <% } %>
     </div>
@@ -30,7 +32,6 @@
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-primary-emphasis">Health & Fitness</strong>
           <h3 class="mb-0"><%= article.get("title") %></h3>
-          <p class="card-text mb-auto"><%= article.get("description") %></p>
           <a href="<%= article.get("url") %>" class="icon-link gap-1 icon-link-hover stretched-link">Continue reading</a>
         </div>
         <div class="col-auto d-none d-lg-block">
@@ -45,7 +46,7 @@
   <div class="row g-5">
     <div class="col-md-8">
       <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        More Health & Fitness News
+        More Sports News
       </h3>
 
       <%
@@ -64,5 +65,3 @@
   </div>
 
 </main>
-
-
