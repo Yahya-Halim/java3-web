@@ -20,7 +20,7 @@ import java.util.Map;
 
 @WebServlet("")
 public class HomeServlet extends HttpServlet {
-    private static final String NEWS_API_URL = "https://api.mediastack.com/v1/news?categories=sports&languages=en&access_key=b0a714cc78622e98e35469b9773b34bc";
+    private static final String NEWS_API_URL = "https://api.mediastack.com/v1/news?categories=technology&languages=en&access_key=b0a714cc78622e98e35469b9773b34bc";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
