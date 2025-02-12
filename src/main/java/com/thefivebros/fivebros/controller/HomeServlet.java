@@ -20,7 +20,7 @@ import java.util.Map;
 
 @WebServlet("")
 public class HomeServlet extends HttpServlet {
-    private static final String NEWS_API_URL = "https://api.mediastack.com/v1/news?categories=technology&languages=en&access_key=b0a714cc78622e98e35469b9773b34bc";
+    private static final String NEWS_API_URL = "https://api.nytimes.com/svc/topstories/v2/technology.json?api-key=CFIBOZHHTfwd5PG2FthkOfGVonwp5qAa";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,61 +32,58 @@ public class HomeServlet extends HttpServlet {
 
     private List<Map<String, String>> fetchNews() {
         List<Map<String, String>> articles = new ArrayList<>();
-        HttpURLConnection conn = null;
-        BufferedReader br = null;
 
         try {
             URL url = new URL(NEWS_API_URL);
-            conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                throw new IOException("Failed to fetch news: HTTP error code " + responseCode);
             }
 
-            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String output;
-            while ((output = br.readLine()) != null) {
-                response.append(output);
-            }
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
 
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            JSONArray newsArray = jsonResponse.optJSONArray("data");
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                JSONArray newsArray = jsonResponse.optJSONArray("results");
 
-            if (newsArray != null) {
-                for (int i = 0; i < newsArray.length(); i++) {
-                    JSONObject newsItem = newsArray.optJSONObject(i);
-                    if (newsItem != null) {
+                if (newsArray != null) {
+                    for (int i = 0; i < newsArray.length(); i++) {
+                        JSONObject newsItem = newsArray.getJSONObject(i);
                         Map<String, String> article = new HashMap<>();
+                        article.put("image", "https://via.placeholder.com/200x250");
                         article.put("title", newsItem.optString("title", "No Title"));
                         article.put("url", newsItem.optString("url", "#"));
-                        article.put("description", newsItem.optString("description", "No description available."));
-                        article.put("image", newsItem.optString("image", "https://via.placeholder.com/200x250"));
-                        article.put("source", newsItem.optString("source", "Unknown"));
-                        article.put("publishedAt", newsItem.optString("publishedAt", "Unknown"));
+                        article.put("description", newsItem.optString("abstract", "No description available."));
+                        article.put("source", "The New York Times");
+                        article.put("publishedAt", newsItem.optString("published_date", "Unknown"));
+
+                        // Extracting image if available
+                        JSONArray multimedia = newsItem.optJSONArray("multimedia");
+                        if (multimedia != null && multimedia.length() > 0) {
+                            article.put("image", multimedia.getJSONObject(0).optString("url", "https://via.placeholder.com/500x250"));
+                        } else {
+                            article.put("image", "https://via.placeholder.com/200x250");
+                        }
+
                         articles.add(article);
                     }
+                } else {
+                    throw new IOException("API response did not contain valid 'results' data.");
                 }
-            } else {
-                throw new RuntimeException("API response did not contain valid data.");
+            } finally {
+                conn.disconnect();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Close resources to avoid memory leaks
-            try {
-                if (br != null) {
-                    br.close();
-                }
-                if (conn != null) {
-                    conn.disconnect();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            e.printStackTrace(); // Log error
         }
 
         return articles;
