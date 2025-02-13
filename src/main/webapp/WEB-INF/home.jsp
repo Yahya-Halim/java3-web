@@ -1,6 +1,13 @@
 <%@ page import="java.util.List, java.util.Map" %>
 
-
+<style>
+  main {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    z-index: 2;
+  }
+</style>
 <main class="container">
 
   <!-- Featured News -->
@@ -30,11 +37,11 @@
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary-emphasis">Technology</strong>
+          <strong class="d-inline-block mb-2 text-primary">Technology</strong>
           <h3 class="mb-0"><%= article.get("title") %></h3>
-          <a href="<%= article.get("url") %>" class="icon-link gap-1 icon-link-hover stretched-link">Continue reading</a>
+          <a href="<%= article.get("url") %>" class="icon-link gap-5 icon-link-hover stretched-link">Continue reading</a>
         </div>
-        <div class="col-auto d-none d-lg-block">
+        <div class="col-auto d-none d-sm-block">
           <img src="<%= article.get("image") %>" width="200" height="250" alt="News Image" onerror="this.src='https://via.placeholder.com/200x250';">
         </div>
       </div>
@@ -55,7 +62,7 @@
             Map<String, String> article = newsArticles.get(i);
       %>
       <article class="blog-post">
-        <h2 class="display-5 link-body-emphasis mb-1"><%= article.get("title") %></h2>
+        <h2 class="display-5 link-body mb-1"><%= article.get("title") %></h2>
         <p class="blog-post-meta">Published <a href="<%= article.get("url") %>">Read more</a></p>
         <p><%= article.get("description") %></p>
       </article>
@@ -65,3 +72,5 @@
   </div>
 
 </main>
+
+
