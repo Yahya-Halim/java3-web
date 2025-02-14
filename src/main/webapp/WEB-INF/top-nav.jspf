@@ -19,7 +19,6 @@
           <li><a href="${appURL}/login"><span class="icon fa fa-sign-in"></span><span class="item-name">Login</span></a></li>
           <li><a href="${appURL}/signup"><span class="icon fa fa-user-plus"></span><span class="item-name">Sign-up</span></a></li>
         </ul>
-
       </c:when>
       <c:otherwise>
         <ul class="menu-items">
@@ -28,9 +27,18 @@
         </ul>
       </c:otherwise>
     </c:choose>
-    </div>
-
+  </div>
 </aside>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <ul>
+    <li><a href="${appURL}"><span class="icon fa fa-house"></span></a></li>
+    <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span></a></li>
+    <li><a href="${appURL}/join"><span class="icon fa fa-user-plus"></span></a></li>
+    <li><a href="${appURL}/users"><span class="icon fa fa-users"></span></a></li>
+  </ul>
+</div>
 
 <style>
   @import url(https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400&display=swap);
@@ -49,6 +57,7 @@
   }
 
   aside {
+    display: block;
     padding: 10px;
     position: fixed;
     min-height: 100vh;
@@ -203,11 +212,69 @@
     left: calc(var(--collapsed-width) + 20px);
   }
   /* Mobile Styles */
+  /* Bottom Navigation Styles */
+  .bottom-nav {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(0deg, #1f314b, black);
+    box-shadow: 0px -3px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10; /* Make sure it's on top */
+    padding: 10px 0;
+  }
+
+  .bottom-nav ul {
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    list-style: none;
+  }
+
+  .bottom-nav li {
+    flex: 1;
+    text-align: center;
+  }
+
+  .bottom-nav a {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+  }
+
+  .bottom-nav a:hover {
+    color: #daddff;
+  }
+
+  /* Responsive Styles */
+
+
+  /* Ensure the body or main content doesn't push the nav off screen */
+  body {
+    padding-bottom: 60px; /* Add padding at the bottom to ensure content isn't hidden behind the nav */
+  }
   @media (max-width: 768px) {
-    .menu-btn {
-      right: 20px;
+    .sidebar {
+      display: none; /* Hide the sidebar */
+    }
+
+    :root {
+      --menu-width: 0px; /* Set the menu width to 0 */
+    }
+
+    /* Adjust main content to use the full width when sidebar is hidden */
+    main {
+      left: 0; /* Adjust main content positioning */
+      width: 100%; /* Make the main content take up the full width */
+    }
+
+    /* Bottom Navigation visibility on small screens */
+    .bottom-nav {
+      display: block; /* Show the bottom navigation on mobile */
     }
   }
+
 
 </style>
 <script>

@@ -1,28 +1,28 @@
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<div class="b-example-divider"></div>
+<%--<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>--%>
+<%--<div class="b-example-divider"></div>--%>
 
-<div class="container">
-  <footer class="py-3 my-4">
+<%--<div class="container">--%>
+<%--  <footer class="py-3 my-4">--%>
 
-      <a href="${appURL}"><span class="icon fa fa-house"></span><span class=""></span></a>
-      <a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class=""></span></a>
-      <a href="${appURL}/join"><span class="icon fa fa-user-plus"></span><span class=""></span></a>
-      <a href="${appURL}/users"><span class="icon fa fa-users"></span><span class=""></span></a>
+<%--      <a href="${appURL}"><span class="icon fa fa-house"></span><span class=""></span></a>--%>
+<%--      <a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class=""></span></a>--%>
+<%--      <a href="${appURL}/join"><span class="icon fa fa-user-plus"></span><span class=""></span></a>--%>
+<%--      <a href="${appURL}/users"><span class="icon fa fa-users"></span><span class=""></span></a>--%>
 
-    <p class="text-center text-body-secondary">&copy; <fmt:formatDate value="${date}" pattern="yyyy" /> The Five Bro's , Inc</p>
-  </footer>
-</div>
+<%--    <p class="text-center text-body-secondary">&copy; <fmt:formatDate value="${date}" pattern="yyyy" /> The Five Bro's , Inc</p>--%>
+<%--  </footer>--%>
+<%--</div>--%>
 
-<style>
-  footer {
-    display: flex;
-    flex-direction: row; /* Stack items vertically */
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically if needed */
-    text-align: center; /* Ensures text elements are centered */
-  }
-  footer a {
-    margin: 20px; /* Add some spacing between links */
-  }
+<%--<style>--%>
+<%--  footer {--%>
+<%--    display: flex;--%>
+<%--    flex-direction: row; /* Stack items vertically */--%>
+<%--    align-items: center; /* Center horizontally */--%>
+<%--    justify-content: center; /* Center vertically if needed */--%>
+<%--    text-align: center; /* Ensures text elements are centered */--%>
+<%--  }--%>
+<%--  footer a {--%>
+<%--    margin: 20px; /* Add some spacing between links */--%>
+<%--  }--%>
 
-</style>
+<%--</style>--%>
