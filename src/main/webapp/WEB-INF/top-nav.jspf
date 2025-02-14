@@ -202,6 +202,13 @@
   .collapsed main {
     left: calc(var(--collapsed-width) + 20px);
   }
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .menu-btn {
+      right: 20px;
+    }
+  }
+
 </style>
 <script>
   const menuBtn = document.querySelector(".menu-btn");
