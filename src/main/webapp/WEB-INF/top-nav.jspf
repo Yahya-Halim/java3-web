@@ -9,8 +9,8 @@
   <ul class="menu-items">
     <li><a href="${appURL}"><span class="icon fa fa-house"></span><span class="item-name">Home</span></a></li>
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class="item-name">About Us</span></a></li>
-    <li><a href="${appURL}/join"><span class="icon fa fa-user-plus"></span><span class="item-name">Join our team</span></a></li>
-    <li><a href="${appURL}/users"><span class="icon fa fa-users"></span><span class="item-name">Team</span></a></li>
+    <li><a href="${appURL}/store"><span class="icon fa fa-shop"></span><span class="item-name">Store</span></a></li>
+    <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span><span class="item-name">contact</span></a></li>
   </ul>
   <div class="text-end">
     <c:choose>
@@ -35,9 +35,39 @@
   <ul>
     <li><a href="${appURL}"><span class="icon fa fa-house"></span></a></li>
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span></a></li>
-    <li><a href="${appURL}/join"><span class="icon fa fa-user-plus"></span></a></li>
-    <li><a href="${appURL}/users"><span class="icon fa fa-users"></span></a></li>
+    <li><a href="${appURL}/store"><span class="icon fa fa-shop"></span></a></li>
+    <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span></a></li>
+    <c:choose>
+      <c:when test="${empty sessionScope.activeUser}">
+
+          <li><a href="${appURL}/login"><span class="icon fa fa-sign-in"></span></a></li>
+          <li><a href="${appURL}/signup"><span class="icon fa fa-user-plus"></span></a></li>
+
+      </c:when>
+      <c:otherwise>
+
+          <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span></a></li>
+          <li><a href="${appURL}/signup"><span class="icon fa fa-user"></span></a></li>
+
+      </c:otherwise>
+    </c:choose>
   </ul>
+
+<%--    <c:choose>--%>
+<%--      <c:when test="${empty sessionScope.activeUser}">--%>
+<%--        <ul>--%>
+<%--          <li><a href="${appURL}/login"><span class="icon fa fa-sign-in"></span></a></li>--%>
+<%--          <li><a href="${appURL}/signup"><span class="icon fa fa-user-plus"></span></a></li>--%>
+<%--        </ul>--%>
+<%--      </c:when>--%>
+<%--      <c:otherwise>--%>
+<%--        <ul>--%>
+<%--          <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span></a></li>--%>
+<%--          <li><a href="${appURL}/signup"><span class="icon fa fa-user"></span></a></li>--%>
+<%--        </ul>--%>
+<%--      </c:otherwise>--%>
+<%--    </c:choose>--%>
+
 </div>
 
 <style>
@@ -219,7 +249,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(0deg, #1f314b, black);
+    background-color: #1b1b1b;
     box-shadow: 0px -3px 6px rgba(0, 0, 0, 0.2);
     z-index: 10; /* Make sure it's on top */
     padding: 10px 0;
@@ -238,13 +268,34 @@
   }
 
   .bottom-nav a {
-    color: white;
+    color: #0047ac;
     font-size: 24px;
     text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease-in-out;
+  }
+
+
+  .bottom-nav a::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #02c6ff;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
   }
 
   .bottom-nav a:hover {
-    color: #daddff;
+    color: #02c6ff;
+    text-shadow: 0 0 5px #02c6ff, 0 0 10px #02c6ff, 0 0 20px #02c6ff;
+    transform: translateY(-5px);
+  }
+
+  .bottom-nav a:hover::before {
+    width: 100%;
+    left: 0;
   }
 
   /* Responsive Styles */
