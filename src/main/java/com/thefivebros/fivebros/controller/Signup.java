@@ -2,6 +2,8 @@ package com.thefivebros.fivebros.controller;
 
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
+
+import com.thefivebros.shared.RecaptchaVerifier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,50 +20,61 @@ public class Signup extends HttpServlet {
         req.setAttribute("pageTitle", "Sign up for an account");
         req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
         String[] terms = req.getParameterValues("terms");
+        // Retrieve the reCAPTCHA response from the form
+        String recaptchaResponse = req.getParameter("g-recaptcha-response");
+
         req.setAttribute("email", email);
         req.setAttribute("password1", password1);
         req.setAttribute("password2", password2);
-        req.setAttribute("terms", terms != null && terms[0].equals("agree") ? "agree" : "" );
+        req.setAttribute("terms", (terms != null && terms[0].equals("agree")) ? "agree" : "");
         req.setAttribute("pageTitle", "Sign up for an account");
 
-        User user = new User();
         boolean errorFound = false;
+
+        // Verify reCAPTCHA response
+        if (recaptchaResponse == null || RecaptchaVerifier.verify(recaptchaResponse)) {
+            errorFound = true;
+            req.setAttribute("userAddFail", "reCAPTCHA verification failed. Please try again.");
+        }
+
+        User user = new User();
         try {
             user.setEmail(email);
         } catch (IllegalArgumentException e) {
             errorFound = true;
             req.setAttribute("emailError", e.getMessage());
         }
-        if(UserDAO.get(email) != null) {
+        if (UserDAO.get(email) != null) {
             errorFound = true;
             req.setAttribute("emailError", "A user with that email already exists. Please login or reset your password.");
         }
         try {
             user.setPassword(password1.toCharArray());
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             errorFound = true;
             req.setAttribute("password1Error", e.getMessage());
         }
-        if(password2 != null && password2.equals("")) {
+        if (password2 == null || password2.equals("")) {
             errorFound = true;
             req.setAttribute("password2Error", "Please confirm your password");
         }
-        if(password1 != null && password2 != null && !password2.equals(password1)) {
+        if (password1 != null && password2 != null && !password2.equals(password1)) {
             errorFound = true;
             req.setAttribute("password2Error", "Passwords don't match");
         }
-        if(terms == null || !terms[0].equals("agree")) {
+        if (terms == null || !terms[0].equals("agree")) {
             errorFound = true;
             req.setAttribute("termsError", "You must agree to our terms of use");
         }
 
-        if(!errorFound) {
+        if (!errorFound) {
             user.setPrivileges("user");
             user.setStatus("active");
             boolean userAdded = false;
@@ -70,20 +83,17 @@ public class Signup extends HttpServlet {
             } catch (RuntimeException e) {
                 req.setAttribute("userAddFail", "User could not be added");
             }
-            if(userAdded) {
+            if (userAdded) {
                 user.setPassword(null);
                 HttpSession session = req.getSession(); // get an existing session if one exists
                 session.invalidate(); // remove any existing sessions
                 session = req.getSession(); // create a brand new session
                 session.setAttribute("activeUser", user);
                 session.setAttribute("flashMessageSuccess", "User successfully added");
-
             }
         }
 
         req.setAttribute("pageTitle", "Sign up for an account");
-
         req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
     }
 }
-

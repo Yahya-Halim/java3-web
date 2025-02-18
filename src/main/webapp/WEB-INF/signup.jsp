@@ -2,7 +2,7 @@
 <div class="main-container">
     <div class="form-wrapper">
         <div class="form-title">Sign Up</div>
-        <c:if test="${not empty userAddFail}">--%>
+        <c:if test="${not empty userAddFail}">
             <div class="alert alert-danger mb-2">${userAddFail}</div>
         </c:if>
         <form method="POST" action="${appURL}/signup">
@@ -33,6 +33,9 @@
                 <c:if test="${not empty termsError}"><div class="invalid-feedback">${termsError}</div></c:if>
             </div>
 
+            <!-- reCAPTCHA Widget -->
+            <div class="g-recaptcha" data-sitekey="6LfRe9oqAAAAAIOxxur3EtZjGRmq82ue8jmkTXPK"></div>
+
             <input type="submit" value="Sign up" id="login-btn">
 
             <small style="color: rgba(11, 255, 72, 0.75)">Already have an account? <a href="${appURL}/login">Log in</a></small>
@@ -48,6 +51,10 @@
     </div>
     <div class="bg"></div>
 </div>
+
+<!-- Load reCAPTCHA script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
     @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 
