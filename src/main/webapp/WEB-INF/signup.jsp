@@ -10,27 +10,35 @@
                 <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="text" id="email" name="email" value="${email}" >
                 <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="email">Email address</label>
                 <span class="bi bi-envelope absolute right-2 bottom-2 text-white"></span>
-                <c:if test="${not empty emailError}"><div class="invalid-feedback">${emailError}</div></c:if>
+                <c:if test="${not empty emailError}">
+                    <div class="invalid-feedback">${emailError}</div>
+                </c:if>
             </div>
 
             <div class="field relative mt-12">
                 <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="password" id="password1" name="password1">
                 <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="password1">Password</label>
                 <span class="toggle-pass bi bi-eye absolute right-2 bottom-2 text-white cursor-pointer"></span>
-                <c:if test="${not empty password1Error}"><div class="invalid-feedback">${password1Error}</div></c:if>
+                <c:if test="${not empty password1Error}">
+                    <div class="invalid-feedback">${password1Error}</div>
+                </c:if>
             </div>
 
             <div class="field relative mt-12">
-                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="password" id="password2" name="password2" >
+                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="password" id="password2" name="password2">
                 <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="password2">Confirm Password</label>
                 <span class="toggle-pass bi bi-eye absolute right-2 bottom-2 text-white cursor-pointer"></span>
-                <c:if test="${not empty password2Error}"><div class="invalid-feedback">${password2Error}</div></c:if>
+                <c:if test="${not empty password2Error}">
+                    <div class="invalid-feedback">${password2Error}</div>
+                </c:if>
             </div>
 
             <div class="form-checkbox mb-3 flex items-center gap-2">
                 <input type="checkbox" class="cursor-pointer" value="agree" id="terms" name="terms" <c:if test="${terms eq 'agree'}">checked</c:if>>
                 <label for="terms">Agree to the <a href="${appURL}/terms" class="text-blue-400 hover:underline">Terms of Service</a></label>
-                <c:if test="${not empty termsError}"><div class="invalid-feedback">${termsError}</div></c:if>
+                <c:if test="${not empty termsError}">
+                    <div class="invalid-feedback">${termsError}</div>
+                </c:if>
             </div>
 
             <div class="g-recaptcha" data-sitekey="6LfVodsqAAAAAI-90Yq0nkE8mBHXbtc8PHDAmZ0v"></div>
@@ -51,12 +59,8 @@
     <div class="bg absolute top-0 left-0 w-full h-full z-0 opacity-80 bg-cover bg-no-repeat" style="background-image: url('https://images.pexels.com/photos/1668246/pexels-photo-1668246.jpeg');"></div>
 </div>
 
-
-
 <!-- Include Google reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-
 
 <script>
     document.querySelectorAll('.toggle-pass').forEach(toggle => {
