@@ -15,8 +15,8 @@ import java.net.URL;
 
 @WebServlet("/signup")
 public class Signup extends HttpServlet {
-    private static final String RECAPTCHA_SECRET_KEY = "6LfVodsqAAAAAIhC0SaMiUyrZn0ZZGRbDB3HoI9c";
 
+    private static final String RECAPTCHA_SECRET_KEY = System.getenv("RECAPTCHA_SECRET_KEY");
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("pageTitle", "Sign up for an account");
