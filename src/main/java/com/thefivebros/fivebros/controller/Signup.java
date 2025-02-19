@@ -40,10 +40,7 @@ public class Signup extends HttpServlet {
         boolean errorFound = false;
 
         // Verify reCAPTCHA response
-        if (recaptchaResponse == null || !isCaptchaValid(RECAPTCHA_SECRET_KEY, recaptchaResponse)) {
-            errorFound = true;
-            req.setAttribute("userAddFail", "reCAPTCHA verification failed. Please try again.");
-        }
+
 
         User user = new User();
         try {
@@ -74,6 +71,10 @@ public class Signup extends HttpServlet {
             errorFound = true;
             req.setAttribute("termsError", "You must agree to our terms of use");
         }
+        if (recaptchaResponse == null || !isCaptchaValid(RECAPTCHA_SECRET_KEY, recaptchaResponse)) {
+            errorFound = true;
+            req.setAttribute("userAddFail", "reCAPTCHA verification failed. Please try again.");
+        }
 
         if (!errorFound) {
             user.setPrivileges("user");
@@ -84,6 +85,7 @@ public class Signup extends HttpServlet {
             } catch (RuntimeException e) {
                 req.setAttribute("userAddFail", "User could not be added");
             }
+
             if (userAdded) {
                 user.setPassword(null);
                 HttpSession session = req.getSession();
@@ -95,6 +97,7 @@ public class Signup extends HttpServlet {
                 return;
             }
         }
+
 
         req.setAttribute("pageTitle", "Sign up for an account");
         req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
