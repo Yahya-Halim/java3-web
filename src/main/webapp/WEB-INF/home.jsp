@@ -1,13 +1,13 @@
 <%@ page import="java.util.List, java.util.Map" %>
 
-<style>
-  main {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    z-index: 2;
-  }
-</style>
+<%--<style>--%>
+<%--  main {--%>
+<%--    display: flex;--%>
+<%--    min-height: 100vh;--%>
+<%--    flex-direction: column;--%>
+<%--    z-index: 2;--%>
+<%--  }--%>
+<%--</style>--%>
 <main class="container">
 
   <!-- Featured News -->

@@ -47,6 +47,8 @@
       });
     });
   </script>
+  <c:if test="${pageTitle eq 'Login'}"><script src="${appURL}/scripts/remember-me.js"></script></c:if>
+
 
 <%--  Additional JavaScript  --%>
 </head>

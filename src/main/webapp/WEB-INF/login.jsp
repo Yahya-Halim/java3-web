@@ -6,7 +6,7 @@
       <div class="mb-4 text-red-600 bg-red-100 p-3 rounded-lg text-center">${loginFail}</div>
     </c:if>
 
-    <form method="post" action="${appURL}/login" class="space-y-4">
+    <form method="post" action="${appURL}/login" class="space-y-4" id="loginForm">
       <div class="relative">
         <label for="email" class="absolute left-3 top-3 text-gray-400 transition-all duration-300 pointer-events-none">Email address</label>
         <input type="text" id="email" name="email" class="w-full h-12 bg-transparent border border-gray-300 px-4 rounded-lg focus:ring-2 focus:ring-purple-500 text-white placeholder-transparent focus:placeholder-gray-400" placeholder="Email address" value="${email}">

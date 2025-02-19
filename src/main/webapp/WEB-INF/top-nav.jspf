@@ -1,5 +1,3 @@
-
-
 <aside class="sidebar">
   <button class="menu-btn fa fa-chevron-left"></button>
   <a href="${appURL}" class="logo-wrapper">
@@ -11,6 +9,10 @@
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class="item-name">About Us</span></a></li>
     <li><a href="${appURL}/store"><span class="icon fa fa-shop"></span><span class="item-name">Store</span></a></li>
     <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span><span class="item-name">contact</span></a></li>
+    <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'admin'}">
+        <li><a href="${appURL}/users"><span class="icon fa fa-users"></span><span class="item-name">All Users</span></a></li>
+    </c:if>
+
   </ul>
   <div class="text-end">
     <c:choose>
@@ -22,7 +24,7 @@
       </c:when>
       <c:otherwise>
         <ul class="menu-items">
-          <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span><span class="item-name">Sign Out</span></a></li>
+          <li><a href="${appURL}/signout"><span class="icon fa fa-sign-out"></span><span class="item-name">Sign Out</span></a></li>
           <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span><span class="item-name">My Profile</span></a></li>
         </ul>
       </c:otherwise>
@@ -37,6 +39,9 @@
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span></a></li>
     <li><a href="${appURL}/store"><span class="icon fa fa-shop"></span></a></li>
     <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span></a></li>
+    <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'admin'}">
+      <li><a href="${appURL}/users"><span class="icon fa fa-users"></span></a></li>
+    </c:if>
     <c:choose>
       <c:when test="${empty sessionScope.activeUser}">
 
@@ -46,27 +51,14 @@
       </c:when>
       <c:otherwise>
 
-          <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span></a></li>
+          <li><a href="${appURL}/signout"><span class="icon fa fa-sign-out"></span></a></li>
           <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span></a></li>
 
       </c:otherwise>
     </c:choose>
   </ul>
 
-<%--    <c:choose>--%>
-<%--      <c:when test="${empty sessionScope.activeUser}">--%>
-<%--        <ul>--%>
-<%--          <li><a href="${appURL}/login"><span class="icon fa fa-sign-in"></span></a></li>--%>
-<%--          <li><a href="${appURL}/signup"><span class="icon fa fa-user-plus"></span></a></li>--%>
-<%--        </ul>--%>
-<%--      </c:when>--%>
-<%--      <c:otherwise>--%>
-<%--        <ul>--%>
-<%--          <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span></a></li>--%>
-<%--          <li><a href="${appURL}/signup"><span class="icon fa fa-user"></span></a></li>--%>
-<%--        </ul>--%>
-<%--      </c:otherwise>--%>
-<%--    </c:choose>--%>
+
 
 </div>
 
