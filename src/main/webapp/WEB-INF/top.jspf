@@ -33,7 +33,22 @@
   <script defer src="https://code.jquery.com/jquery-3.7.1.min.js"
           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
           crossorigin="anonymous"></script>
-  <%--  Additional JavaScript  --%>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfRe9oqAAAAAIOxxur3EtZjGRmq82ue8jmkTXPK" async defer></script>
+  <script>
+    grecaptcha.enterprise.ready(function() {
+      grecaptcha.enterprise.execute('6LfRe9oqAAAAAIOxxur3EtZjGRmq82ue8jmkTXPK', {action: 'signup'}).then(function(token) {
+        // Add token to a hidden input in your form
+        var recaptchaResponse = document.createElement('input');
+        recaptchaResponse.setAttribute('type', 'hidden');
+        recaptchaResponse.setAttribute('name', 'recaptcha_token');
+        recaptchaResponse.setAttribute('value', token);
+        document.forms[0].appendChild(recaptchaResponse);
+      });
+    });
+  </script>
+
+<%--  Additional JavaScript  --%>
 </head>
 <body>
 <%@ include file="/WEB-INF/top-nav.jspf"%>

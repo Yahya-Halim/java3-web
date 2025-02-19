@@ -2,19 +2,21 @@ package com.thefivebros.fivebros.controller;
 
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
-
-import com.thefivebros.shared.RecaptchaVerifier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
+import org.json.JSONObject;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @WebServlet("/signup")
 public class Signup extends HttpServlet {
+    private static final String RECAPTCHA_SECRET_KEY = "6LfVodsqAAAAAIhC0SaMiUyrZn0ZZGRbDB3HoI9c";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("pageTitle", "Sign up for an account");
@@ -27,7 +29,6 @@ public class Signup extends HttpServlet {
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
         String[] terms = req.getParameterValues("terms");
-        // Retrieve the reCAPTCHA response from the form
         String recaptchaResponse = req.getParameter("g-recaptcha-response");
 
         req.setAttribute("email", email);
@@ -39,7 +40,7 @@ public class Signup extends HttpServlet {
         boolean errorFound = false;
 
         // Verify reCAPTCHA response
-        if (recaptchaResponse == null || RecaptchaVerifier.verify(recaptchaResponse)) {
+        if (recaptchaResponse == null || !isCaptchaValid(RECAPTCHA_SECRET_KEY, recaptchaResponse)) {
             errorFound = true;
             req.setAttribute("userAddFail", "reCAPTCHA verification failed. Please try again.");
         }
@@ -85,9 +86,9 @@ public class Signup extends HttpServlet {
             }
             if (userAdded) {
                 user.setPassword(null);
-                HttpSession session = req.getSession(); // get an existing session if one exists
-                session.invalidate(); // remove any existing sessions
-                session = req.getSession(); // create a brand new session
+                HttpSession session = req.getSession();
+                session.invalidate();
+                session = req.getSession();
                 session.setAttribute("activeUser", user);
                 session.setAttribute("flashMessageSuccess", "User successfully added");
             }
@@ -95,5 +96,40 @@ public class Signup extends HttpServlet {
 
         req.setAttribute("pageTitle", "Sign up for an account");
         req.getRequestDispatcher("/WEB-INF/signup.jsp").forward(req, resp);
+    }
+
+    /**
+     * Validates Google reCAPTCHA V2 or Invisible reCAPTCHA.
+     *
+     * @param secretKey Secret key (key given for communication between your site and Google)
+     * @param response reCAPTCHA response from client side.
+     * @return true if validation successful, false otherwise.
+     */
+    public synchronized boolean isCaptchaValid(String secretKey, String response) {
+        try {
+            String url = "https://www.google.com/recaptcha/api/siteverify";
+            String params = "secret=" + secretKey + "&response=" + response;
+
+            HttpURLConnection http = (HttpURLConnection) new URL(url).openConnection();
+            http.setDoOutput(true);
+            http.setRequestMethod("POST");
+            http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            try (OutputStream out = http.getOutputStream()) {
+                out.write(params.getBytes("UTF-8"));
+            }
+
+            try (InputStream res = http.getInputStream();
+                 BufferedReader rd = new BufferedReader(new InputStreamReader(res, "UTF-8"))) {
+                StringBuilder sb = new StringBuilder();
+                int cp;
+                while ((cp = rd.read()) != -1) {
+                    sb.append((char) cp);
+                }
+                JSONObject json = new JSONObject(sb.toString());
+                return json.getBoolean("success");
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -23,7 +23,7 @@
       <c:otherwise>
         <ul class="menu-items">
           <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span><span class="item-name">Sign Out</span></a></li>
-          <li><a href="${appURL}/signup"><span class="icon fa fa-user"></span><span class="item-name">My Profile</span></a></li>
+          <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span><span class="item-name">My Profile</span></a></li>
         </ul>
       </c:otherwise>
     </c:choose>
@@ -47,7 +47,7 @@
       <c:otherwise>
 
           <li><a href="${appURL}/login"><span class="icon fa fa-sign-out"></span></a></li>
-          <li><a href="${appURL}/signup"><span class="icon fa fa-user"></span></a></li>
+          <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span></a></li>
 
       </c:otherwise>
     </c:choose>
