@@ -4,6 +4,7 @@
         <div class="form-title text-2xl">Sign Up</div>
         <c:if test="${not empty userAddFail}">
             <div class="alert alert-danger mb-2">${userAddFail}</div>
+            <c:remove var="userAddFail" scope="session"/>
         </c:if>
         <form method="POST" action="${appURL}/signup">
             <div class="field relative mt-12">

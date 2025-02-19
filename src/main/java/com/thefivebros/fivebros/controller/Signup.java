@@ -2,6 +2,7 @@ package com.thefivebros.fivebros.controller;
 
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
+import com.thefivebros.shared.Config;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +17,6 @@ import java.net.URL;
 @WebServlet("/signup")
 public class Signup extends HttpServlet {
 
-    private static final String RECAPTCHA_SECRET_KEY = System.getenv("RECAPTCHA_SECRET_KEY");
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("pageTitle", "Sign up for an account");
@@ -71,7 +71,7 @@ public class Signup extends HttpServlet {
             errorFound = true;
             req.setAttribute("termsError", "You must agree to our terms of use");
         }
-        if (recaptchaResponse == null || !isCaptchaValid(RECAPTCHA_SECRET_KEY, recaptchaResponse)) {
+        if (recaptchaResponse == null || !isCaptchaValid(Config.getEnv("RECAPTCHA_SECRET_KEY"), recaptchaResponse)) {
             errorFound = true;
             req.setAttribute("userAddFail", "reCAPTCHA verification failed. Please try again.");
         }
