@@ -8,8 +8,8 @@
         </c:if>
         <form method="POST" action="${appURL}/signup">
             <div class="field relative mt-12">
-                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="text" id="email" name="email" value="${email}" >
-                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="email">Email address</label>
+                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer <c:if test="${not empty emailError}">is-invalid</c:if>" type="text" id="email" name="email" value="${email}" >
+                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 text-sm" for="email">Email address</label>
                 <span class="bi bi-envelope absolute right-2 bottom-2 text-white"></span>
                 <c:if test="${not empty emailError}">
                     <div class="invalid-feedback">${emailError}</div>
@@ -17,8 +17,8 @@
             </div>
 
             <div class="field relative mt-12">
-                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="password" id="password1" name="password1">
-                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="password1">Password</label>
+                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer <c:if test="${not empty password1Error}">is-invalid</c:if>" type="password" id="password1" name="password1">
+                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 text-sm" for="password1">Password</label>
                 <span class="toggle-pass bi bi-eye absolute right-2 bottom-2 text-white cursor-pointer"></span>
                 <c:if test="${not empty password1Error}">
                     <div class="invalid-feedback">${password1Error}</div>
@@ -26,8 +26,8 @@
             </div>
 
             <div class="field relative mt-12">
-                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer" type="password" id="password2" name="password2">
-                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 text-sm" for="password2">Confirm Password</label>
+                <input class="inp w-full text-white text-lg caret-black outline-none p-2 bg-transparent border-b border-white/30 focus:border-white/70 transition-all peer <c:if test="${not empty password2Error}">is-invalid</c:if>" type="password" id="password2" name="password2">
+                <label class="label absolute left-0 bottom-2 text-white transition-all peer-placeholder-shown:opacity-100 peer-placeholder-shown:translate-y-0 peer-focus:opacity-0 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 text-sm" for="password2">Confirm Password</label>
                 <span class="toggle-pass bi bi-eye absolute right-2 bottom-2 text-white cursor-pointer"></span>
                 <c:if test="${not empty password2Error}">
                     <div class="invalid-feedback">${password2Error}</div>
