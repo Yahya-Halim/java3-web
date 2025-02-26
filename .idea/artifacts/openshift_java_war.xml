@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="openshift-java:war">
+    <output-path>$PROJECT_DIR$/out/target/openshift_java_war</output-path>
+    <root id="root" />
+  </artifact>
+</component>

@@ -1,5 +1,6 @@
 package com.thefivebros.fivebros.controller;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,9 +25,17 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ServletContext context = getServletContext();
+
+        // Determine whether the app is running locally or on OpenShift
+        String env = System.getenv("OPENSHIFT_APP_NAME") != null ? "cloud" : "local";
+        String appURL = env.equals("cloud") ? context.getInitParameter("appURLCloud") : context.getInitParameter("appURLLocal");
+
         List<Map<String, String>> newsArticles = fetchNews();
+
         req.setAttribute("newsArticles", newsArticles);
         req.setAttribute("pageTitle", "Home");
+        req.setAttribute("appURL", appURL); // Pass appURL to JSP for use in links
         req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
     }
 
@@ -69,8 +78,6 @@ public class HomeServlet extends HttpServlet {
                         JSONArray multimedia = newsItem.optJSONArray("multimedia");
                         if (multimedia != null && multimedia.length() > 0) {
                             article.put("image", multimedia.getJSONObject(0).optString("url", "https://via.placeholder.com/500x250"));
-                        } else {
-                            article.put("image", "https://via.placeholder.com/200x250");
                         }
 
                         articles.add(article);

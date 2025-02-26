@@ -27,7 +27,7 @@
     </context-param>
     <context-param>
         <param-name>appURLCloud</param-name>
-        <param-value>https://thefivebros.azurewebsites.net</param-value>
+        <param-value>https://httpd-thefivebros-yoyo2o3-dev.apps.rm3.7wse.p1.openshiftapps.com</param-value>
     </context-param>
     <context-param>
         <param-name>debugging</param-name>

@@ -1,7 +1,5 @@
 package com.thefivebros.shared;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,38 +9,36 @@ public class MySQL_Connect {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            throw new SQLException("MySQL driver not found");
+            throw new SQLException("MySQL driver not found.");
         }
 
-        String connectionString = "";
-        try {
-            connectionString = Config.getEnv("AZURE_MYSQL_CONNECTIONSTRING");
-        } catch(IllegalStateException e) {
-            throw new SQLException(e.getMessage());
-        }
+        // Try fetching connection string from environment variable
+        String connectionString = System.getenv("AZURE_MYSQL_CONNECTIONSTRING");
 
-        if(connectionString == null) {
-            throw new SQLException("Connection string not found");
+        if (connectionString == null || connectionString.isEmpty()) {
+            throw new SQLException("Connection string not found in environment variables.");
         }
 
         try {
             Connection connection = DriverManager.getConnection(connectionString);
-            if (connection.isValid(2)) {
+            if (connection != null && connection.isValid(2)) {
                 return connection;
+            } else {
+                throw new SQLException("Failed to establish a valid connection.");
             }
         } catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            throw new SQLException("Database connection error: " + e.getMessage());
         }
-        return null;
     }
 
     public static void main(String[] args) {
         try {
-            if(getConnection() != null) {
-                System.out.println("Connection successful");
+            Connection conn = getConnection();
+            if (conn != null) {
+                System.out.println("Connection successful!");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
     }
 }

@@ -20,7 +20,11 @@
         <label for="rememberMe" class="ml-2 text-sm text-white">Remember me for 30 days</label>
       </div>
       <button type="submit" class="w-full h-12 bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-purple-300 transition duration-300">Sign in</button>
+      <p >Did You Really <a href="${appURL}/reset-password" class="text-purple-400 hover:text-purple-600">Forgot Your password?</a></p>
+
+
     </form>
+
     <p class="mt-4 text-center text-sm text-white">Don't have an account? <a href="${appURL}/signup" class="text-purple-400 hover:text-purple-600">Sign-up</a></p>
   </div>
 </div>
