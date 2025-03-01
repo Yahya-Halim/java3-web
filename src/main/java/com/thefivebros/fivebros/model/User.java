@@ -147,9 +147,9 @@ public class User implements Comparable<User> {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", firstName=" + firstName + '\'' +
+                ", lastName=" + lastName + '\'' +
+                ", email=" + email + '\'' +
                 '}';
     }
 

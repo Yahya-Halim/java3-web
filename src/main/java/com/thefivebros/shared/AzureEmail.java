@@ -42,4 +42,12 @@ public class AzureEmail {
 
         return "";
     }
+
+    public static void main(String[] args) {
+        String toEmailAddress = "yahyamohamed11no1@gmail.com";
+        String subject = "Test Email";
+        String bodyHTML = Jsoup.parseBodyFragment("<h1>Hello, World!</h1>").html();
+
+        System.out.println(sendEmail(toEmailAddress, subject, bodyHTML));
+    }
 }

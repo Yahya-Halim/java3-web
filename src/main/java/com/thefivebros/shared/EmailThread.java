@@ -1,6 +1,6 @@
 package com.thefivebros.shared;
 
-public class EmailThread extends Thread{
+public class EmailThread extends Thread {
     private String toEmailAddress;
     private String subject;
     private String bodyHTML;
@@ -12,16 +12,10 @@ public class EmailThread extends Thread{
         this.bodyHTML = bodyHTML;
     }
 
-    @Override
     public void run() {
         errorMessage = AzureEmail.sendEmail(toEmailAddress, subject, bodyHTML);
-        // TODO: Implement a backup email service in case Azure is down
+        // TODO: Add a backup email service if an error occurs
     }
-
-    public String getToEmailAddress() {
-        return toEmailAddress;
-    }
-
     public String getErrorMessage() {
         return errorMessage;
     }

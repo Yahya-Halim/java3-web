@@ -21,15 +21,10 @@ public class ResetPassword extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         req.setAttribute("email", email);
-        String message = UserDAO.passwordReset(email,req);
+        String message = UserDAO.passwordReset(email, req);
         req.setAttribute("passwordResetMsg", message);
-
-
-        // Simulate a password reset process, replace this with actual logic
         req.setAttribute("pageTitle", "Reset your password");
         req.getRequestDispatcher("WEB-INF/reset-password.jsp").forward(req, resp);
-
-
     }
 }
 

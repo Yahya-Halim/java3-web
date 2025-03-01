@@ -8,6 +8,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,55 @@ import static com.thefivebros.shared.MySQL_Connect.getConnection;
 public class UserDAO {
     public static void main(String[] args) {
 //        getAll().forEach(System.out::println);
-        System.out.println(get("yahyamohamed11no1@gmail.com"));
+//        System.out.println(get("yahyamohamed11no1@gmail.com"));
 //        User user = new User();
 //        user.setEmail("yoyo@test.com");
 //        user.setPassword("P@ssw0rd".toCharArray());
 //        add(user);
     }
+    public static String getPasswordReset(String token) {
+        String email = getPasswordReset(token);
+        try (Connection connection = getConnection();
+             CallableStatement statement = connection.prepareCall("{CALL sp_get_password_reset(?)}")) {
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Instant now = Instant.now();
+                Instant created_at = resultSet.getTimestamp("created_at").toInstant();
+                Duration duration = Duration.between(created_at, now);
+                long minutesElapsed = duration.toMinutes();
+                if(minutesElapsed < 30) {
+                    email = resultSet.getString("email");
+                }
+                int id = resultSet.getInt("id");
+                CallableStatement statement2 = connection.prepareCall("{CALL sp_delete_password_reset(?)}");
+                statement2.setInt(1, id);
+                statement2.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return email;
+    }
+    public static void updatePassword(String email, String password) {
+        try (Connection connection = getConnection()) {
+            if (connection != null) {
+                try (CallableStatement statement = connection.prepareCall("{CALL sp_update_user_password(?, ?)}")) {
+                    statement.setString(1, email);
+                    String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+                    statement.setString(2, encryptedPassword);
+                    statement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
     public static String passwordReset(String email, HttpServletRequest req) {
         User user = get(email);
         if(user == null) {
@@ -62,13 +106,13 @@ public class UserDAO {
                     if(errorMessage == null || errorMessage.isEmpty()) {
                         return "If there's an account associated with the email entered, we will send a password reset link.";
                     } else {
-                        return "Sorry, we couldn't process your password reset. Try again.";
+                        return errorMessage;
                     }
                 } else {
                     return "Sorry, we couldn't process your password reset. Try again.";
                 }
             } catch(SQLException e) {
-                return "Sorry, we couldn't process your password reset. Try again.";
+                return "SQLException " + e.getMessage();
             }
         }
     }

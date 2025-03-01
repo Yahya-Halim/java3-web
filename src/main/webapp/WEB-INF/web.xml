@@ -23,7 +23,7 @@
 
     <context-param>
         <param-name>appURLLocal</param-name>
-        <param-value>http://localhost:8080/five_bros_war_exploded</param-value>
+        <param-value>http://localhost:8080/openshift_java_war_exploded</param-value>
     </context-param>
     <context-param>
         <param-name>appURLCloud</param-name>
