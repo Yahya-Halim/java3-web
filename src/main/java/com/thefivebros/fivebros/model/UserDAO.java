@@ -181,4 +181,32 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
+    public static boolean update(User user) {
+        String sql = "{call sp_user_update(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+        try (Connection conn = getConnection();
+             CallableStatement cstmt = conn.prepareCall(sql)) {
+
+            // Set the parameters for the stored procedure
+            cstmt.setInt(1, user.getUserId());
+            cstmt.setString(2, user.getFirstName());
+            cstmt.setString(3, user.getLastName());
+            cstmt.setString(4, user.getEmail());
+            cstmt.setString(5, user.getPhone());
+            cstmt.setString(6, new String(user.getPassword())); // Convert char[] to String
+            cstmt.setString(7, user.getLanguage());
+            cstmt.setString(8, user.getStatus());
+            cstmt.setString(9, user.getPrivileges());
+            cstmt.setString(10, user.getTimezone());
+
+            // Execute the stored procedure
+            int rowsAffected = cstmt.executeUpdate();
+            return rowsAffected > 0; // Return true if at least one row was updated
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the exception (or handle it appropriately)
+            return false;
+        }
+    }
 }
+
