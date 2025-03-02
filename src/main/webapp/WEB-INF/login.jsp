@@ -8,11 +8,11 @@
 
     <form method="post" action="${appURL}/login" class="space-y-4" id="loginForm">
       <div class="relative">
-        <label for="email" class="absolute left-3 top-3 text-gray-400 transition-all duration-300 pointer-events-none">Email address</label>
+        <label for="email" class="block text-sm font-medium">Email address</label>
         <input type="text" id="email" name="email" class="w-full h-12 bg-transparent border border-gray-300 px-4 rounded-lg focus:ring-2 focus:ring-purple-500 text-white placeholder-transparent focus:placeholder-gray-400" placeholder="Email address" value="${email}">
       </div>
       <div class="relative">
-        <label for="password" class="absolute left-3 top-3 text-gray-400 transition-all duration-300 pointer-events-none">Password</label>
+        <label for="password" class="block text-sm font-medium">Password</label>
         <input type="password" id="password" name="password" class="w-full h-12 bg-transparent border border-gray-300 px-4 rounded-lg focus:ring-2 focus:ring-purple-500 text-white placeholder-transparent focus:placeholder-gray-400" placeholder="Password" value="${password}">
       </div>
       <div class="flex items-center">
@@ -29,15 +29,15 @@
   </div>
 </div>
 
-<script>
-  document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('focus', function() {
-      this.previousElementSibling.classList.add('invisible');
-    });
-    input.addEventListener('blur', function() {
-      if (!this.value) {
-        this.previousElementSibling.classList.remove('invisible');
-      }
-    });
-  });
-</script>
+<%--<script>--%>
+<%--  document.querySelectorAll('input').forEach(input => {--%>
+<%--    input.addEventListener('focus', function() {--%>
+<%--      this.previousElementSibling.classList.add('invisible');--%>
+<%--    });--%>
+<%--    input.addEventListener('blur', function() {--%>
+<%--      if (!this.value) {--%>
+<%--        this.previousElementSibling.classList.remove('invisible');--%>
+<%--      }--%>
+<%--    });--%>
+<%--  });--%>
+<%--</script>--%>
