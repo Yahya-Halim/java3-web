@@ -7,6 +7,8 @@
     </c:if>
 
     <form method="post" action="${appURL}/login" class="space-y-4" id="loginForm">
+      <input type="hidden" name="redirect" value="${redirect}">
+
       <div class="relative">
         <label for="email" class="block text-sm font-medium">Email address</label>
         <input type="text" id="email" name="email" class="w-full h-12 bg-transparent border border-gray-300 px-4 rounded-lg focus:ring-2 focus:ring-purple-500 text-white placeholder-transparent focus:placeholder-gray-400" placeholder="Email address" value="${email}">

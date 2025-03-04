@@ -50,19 +50,21 @@ public class UserDAO {
         }
         return email;
     }
-    public static void updatePassword(String email, String password) {
+    public static boolean updatePassword(String email, String password) {
         try (Connection connection = getConnection()) {
             if (connection != null) {
                 try (CallableStatement statement = connection.prepareCall("{CALL sp_update_user_password(?, ?)}")) {
                     statement.setString(1, email);
                     String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
                     statement.setString(2, encryptedPassword);
-                    statement.executeUpdate();
+                    int rowsAffected = statement.executeUpdate();
+                    return rowsAffected == 1;
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
 
@@ -182,7 +184,7 @@ public class UserDAO {
         }
     }
     public static boolean update(User user) {
-        String sql = "{call sp_user_update(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        String sql = "{CALL sp_update_user(?,?,?,?,?,?,?,?,?)}";
 
         try (Connection conn = getConnection();
              CallableStatement cstmt = conn.prepareCall(sql)) {
@@ -193,7 +195,7 @@ public class UserDAO {
             cstmt.setString(3, user.getLastName());
             cstmt.setString(4, user.getEmail());
             cstmt.setString(5, user.getPhone());
-            cstmt.setString(6, new String(user.getPassword())); // Convert char[] to String
+            cstmt.setString(6, new String(user.getPassword()));
             cstmt.setString(7, user.getLanguage());
             cstmt.setString(8, user.getStatus());
             cstmt.setString(9, user.getPrivileges());
@@ -201,12 +203,14 @@ public class UserDAO {
 
             // Execute the stored procedure
             int rowsAffected = cstmt.executeUpdate();
-            return rowsAffected > 0; // Return true if at least one row was updated
+            return rowsAffected == 1;
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Log the exception (or handle it appropriately)
+            e.printStackTrace();
             return false;
         }
+
     }
+
 }
 

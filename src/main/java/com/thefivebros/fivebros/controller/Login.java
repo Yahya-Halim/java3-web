@@ -18,14 +18,26 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String redirect = req.getParameter("redirect");
+        if(redirect != null && !redirect.equals("")) {
+            req.setAttribute("redirect", redirect);
+            req.setAttribute("loginFail", "You must be logged in to edit your profile");
+
+        }
         req.setAttribute("pageTitle", "Login");
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String redirect = req.getParameter("redirect");
+
+        // code omitted
+        // Flash Message that greets the user
+
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String[] rememberMe = req.getParameterValues("rememberMe");
+        req.setAttribute("redirect", redirect);
         req.setAttribute("email", email);
         req.setAttribute("password", password);
         req.setAttribute("rememberMe", (rememberMe != null && rememberMe[0].equals("true")) ? "true" : "");
@@ -87,8 +99,15 @@ public class Login extends HttpServlet {
 
                 resp.sendRedirect(req.getContextPath()); // Redirects to the home page
                 return;
+
+            }
+            if(redirect != null && !redirect.equals("")) {
+                resp.sendRedirect(req.getContextPath() + "/" + redirect);
+            } else {
+                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/")); // Redirects to the home page
             }
         }
+
 
         req.setAttribute("pageTitle", "Login");
         req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);

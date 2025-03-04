@@ -1,0 +1,31 @@
+<section class="my-4">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap">
+            <!-- Profile banner START -->
+            <div class="w-full">
+                <div class="bg-gray-100 p-6 rounded-lg shadow-sm">
+                    <!-- Profile info -->
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="text-2xl font-semibold text-black">Good morning<c:if test="${not empty activeUser.firstName}">, ${activeUser.firstName}</c:if>!</h4>
+                            <ul class="list-none space-y-1 mt-2">
+                                <li class="flex items-center text-black-700">
+                                    <i class="bi bi-calendar-event-fill text-lg mr-2 text-black"> March 1 20XX, 8:00 AM</i>
+                                </li>
+                                <li class="flex items-center text-black-700">
+                                    <i class="bi bi-star-fill text-lg mr-2 text-black"> Member since January 1, 20XX</i>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Responsive toggler START -->
+                        <button class="lg:hidden bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                            <i class="bi bi-list text-xl"></i>
+                        </button>
+                        <!-- Responsive toggler END -->
+                    </div>
+                </div>
+            </div>
+            <!-- Profile banner END -->
+        </div>
+    </div>
+</section>

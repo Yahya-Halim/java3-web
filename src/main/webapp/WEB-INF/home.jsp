@@ -1,66 +1,72 @@
 <%@ page import="java.util.List, java.util.Map" %>
 
-<%--<style>--%>
-<%--  main {--%>
-<%--    display: flex;--%>
-<%--    min-height: 100vh;--%>
-<%--    flex-direction: column;--%>
-<%--    z-index: 2;--%>
-<%--  }--%>
-<%--</style>--%>
-<main class="container">
-  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis">
-    <div class="row d-flex align-items-center justify-content-between text-primary">
-        <h1 class="display-4 fst-italic">Latest News</h1>
-        <p class="lead my-3">Discover the latest news, events, and updates about new technology.</p>
-        <a href="${appURL}/signup"><button type="button" class="btn btn-primary btn-lg justify-content-center ">Join Today</button></a>
+<!-- Main Container -->
+<main class="flex-1 transition-all duration-300 ease-in-out">
+  <!-- Hero Section -->
+  <div class="relative p-4 md:p-8 mb-8 rounded-lg overflow-hidden bg-black border border-gray-800">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 z-0">
+      <!-- Holographic Gradient Animation -->
+      <div class="absolute inset-0 bg-gradient-to-r from-purple-900 via-blue-900 to-teal-900 opacity-50 animate-holographicBackground"></div>
+      <!-- Particle Animation -->
+      <div class="absolute inset-0 bg-particle opacity-30"></div>
+      <!-- Grid Overlay -->
+      <div class="absolute inset-0 bg-grid-teal-500 opacity-20"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col md:flex-row items-center justify-between text-white">
+      <div>
+        <h1 class="text-4xl md:text-6xl font-bold italic bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400 animate-textGlow">
+          LATEST NEWS
+        </h1>
+        <p class="text-lg md:text-xl my-3 font-mono text-teal-300">Discover the latest news, events, and updates about new technology.</p>
+      </div>
+      <a href="${appURL}/signup" class="mt-4 md:mt-0">
+        <button class="bg-gradient-to-r from-teal-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-teal-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-teal-500/50">
+          Join Today
+        </button>
+      </a>
     </div>
   </div>
+
   <!-- Featured News -->
-  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-    <div class="row d-flex align-items-center justify-content-between">
-      <div class="col-lg-6 px-0">
-        <%
-          List<Map<String, String>> newsArticles = (List<Map<String, String>>) request.getAttribute("newsArticles");
-          if (newsArticles != null && !newsArticles.isEmpty()) {
-            Map<String, String> featured = newsArticles.get(0);
-        %>
-        <h1 class="display-4 fst-italic"><%= featured.get("title") %></h1>
-        <p class="lead my-3"><%= featured.get("description") %></p>
-        <p class="lead mb-0">
-          <a href="<%= featured.get("url") %>" class="text-body-emphasis fw-bold" target="_blank" rel="noopener noreferrer">Continue reading...</a>
-        </p>
+  <div class="p-4 md:p-8 mb-8 rounded-lg bg-gray-100">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+      <%
+        List<Map<String, String>> newsArticles = (List<Map<String, String>>) request.getAttribute("newsArticles");
+        if (newsArticles != null && !newsArticles.isEmpty()) {
+          Map<String, String> featured = newsArticles.get(0);
+      %>
+      <div class="w-full md:w-1/2">
+        <h1 class="text-4xl md:text-5xl font-bold italic text-black"><%= featured.get("title") %></h1>
+        <p class="text-lg md:text-xl my-3 text-black"><%= featured.get("description") %></p>
+        <a href="<%= featured.get("url") %>" class="text-blue-600 font-bold hover:underline" target="_blank" rel="noopener noreferrer">Continue reading...</a>
       </div>
-      <div class="col-lg-6 text-end order-md-2">
-        <img src="<%= featured.get("image") %>" class="img-fluid rounded" alt="News Image"
-             onerror="this.src='https://via.placeholder.com/1000x250';"
-             style="max-width: 1000px; max-height: 250px; object-fit: cover;">
+      <div class="w-full md:w-1/2 mt-6 md:mt-0 md:pl-8">
+        <img src="<%= featured.get("image") %>" class="w-full h-64 md:h-72 object-cover rounded-lg" alt="News Image" onerror="this.src='https://via.placeholder.com/1000x250';">
       </div>
       <% } %>
     </div>
   </div>
 
-
   <!-- News Grid -->
-  <div class="row mb-2">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <%
       if (newsArticles != null) {
         for (int i = 3; i < Math.min(newsArticles.size(), 9); i++) {
           Map<String, String> article = newsArticles.get(i);
     %>
-    <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary">Technology</strong>
-          <h3 class="mb-0"><%= article.get("title") %></h3>
-          <p class="lead my-3"><%= article.get("description") %></p>
-
-          <a href="<%= article.get("url") %>" class="icon-link gap-4 icon-link-hover stretched-link" target="_blank" rel="noopener noreferrer">Continue reading</a>
+    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 flex-1">
+          <span class="inline-block bg-blue-900 text-blue-200 text-sm font-semibold px-2 py-1 rounded mb-2">Technology</span>
+          <h3 class="text-2xl font-bold mb-2 text-white"><%= article.get("title") %></h3>
+          <p class="text-white-300 mb-4"><%= article.get("description") %></p>
+          <a href="<%= article.get("url") %>" class="text-blue-400 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">Continue reading</a>
         </div>
-        <div class="col-auto d-none d-sm-block col p-4 d-flex flex-column">
-          <img src="<%= article.get("image") %>" class="img-fluid rounded" alt="News Image"
-               onerror="this.src='https://via.placeholder.com/200x250';"
-               style="max-width: 200px; max-height: 250px; object-fit: cover;">
+        <div class="p-6">
+          <img src="<%= article.get("image") %>" class="w-48 h-48 object-cover rounded-lg" alt="News Image" onerror="this.src='https://via.placeholder.com/200x250';">
         </div>
       </div>
     </div>
@@ -68,27 +74,85 @@
   </div>
 
   <!-- Blog Post Section -->
-  <div class="row g-5">
-    <div class="col-md-8">
-      <h3 class="pb-4 mb-4 fst-italic border-bottom">
-        More Technology News
-      </h3>
-
+  <div class="mt-8">
+    <div class="max-w-4xl mx-auto">
+      <h3 class="text-3xl font-bold italic border-b-2 border-gray-200 pb-4 mb-6 text-white">More Technology News</h3>
       <%
         if (newsArticles != null) {
           for (int i = 10; i < Math.min(newsArticles.size(), 20); i++) {
             Map<String, String> article = newsArticles.get(i);
       %>
-      <article class="blog-post">
-        <h2 class="display-5 link-body mb-1"><%= article.get("title") %></h2>
-        <p class="blog-post-meta">Published <a href="<%= article.get("url") %>" target="_blank" rel="noopener noreferrer">Read more</a></p>
-        <p><%= article.get("description") %></p>
+      <article class="mb-8">
+        <h2 class="text-2xl font-bold text-white-800 mb-2 "><%= article.get("title") %></h2>
+        <p class="text-white-600 mb-4">Published <a href="<%= article.get("url") %>" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Read more</a></p>
+        <p class="text-white-700"><%= article.get("description") %></p>
       </article>
       <% } } %>
-
     </div>
   </div>
-
 </main>
 
 
+<!-- Custom CSS for Animations -->
+<style>
+  /* Holographic Background Animation */
+  @keyframes holographicBackground {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-holographicBackground {
+    background-size: 200% 200%;
+    animation: holographicBackground 10s ease infinite;
+  }
+
+  /* Text Glow Animation */
+  @keyframes textGlow {
+    0% {
+      opacity: 0.8;
+      text-shadow: 0 0 10px rgba(14, 165, 233, 0.8), 0 0 20px rgba(79, 70, 229, 0.8);
+    }
+    50% {
+      opacity: 1;
+      text-shadow: 0 0 20px rgba(14, 165, 233, 1), 0 0 40px rgba(79, 70, 229, 1);
+    }
+    100% {
+      opacity: 0.8;
+      text-shadow: 0 0 10px rgba(14, 165, 233, 0.8), 0 0 20px rgba(79, 70, 229, 0.8);
+    }
+  }
+
+  .animate-textGlow {
+    animation: textGlow 2s ease-in-out infinite;
+  }
+
+  /* Grid Overlay */
+  .bg-grid-teal-500 {
+    background-image: linear-gradient(to right, rgba(20, 184, 166, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 184, 166, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Particle Animation */
+  .bg-particle {
+    background-image: radial-gradient(circle, rgba(20, 184, 166, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: moveParticles 5s linear infinite;
+  }
+
+  @keyframes moveParticles {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+</style>

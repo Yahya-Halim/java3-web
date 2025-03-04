@@ -85,8 +85,17 @@ public class User implements Comparable<User> {
         return phone;
     }
 
+
     public void setPhone(String phone) {
+
+        if (phone != null && !phone.equals("") && !Validators.isValidPhone(phone)) {
+
+            throw new IllegalArgumentException("Invalid phone number");
+
+        }
+
         this.phone = phone;
+
     }
 
     public char[] getPassword() {
@@ -107,8 +116,17 @@ public class User implements Comparable<User> {
         return language;
     }
 
+
     public void setLanguage(String language) {
+
+        if (!Validators.isValidLanguage(language)) {
+
+            throw new IllegalArgumentException("Invalid language");
+
+        }
+
         this.language = language;
+
     }
 
     public String getStatus() {

@@ -25,11 +25,12 @@
       <c:otherwise>
         <ul class="menu-items">
           <li><a href="${appURL}/signout"><span class="icon fa fa-sign-out"></span><span class="item-name">Sign Out</span></a></li>
-          <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span><span class="item-name">My Profile</span></a></li>
+          <li><a href="${appURL}/edit-profile"><span class="icon fa fa-user"></span><span class="item-name">Edit Profile</span></a></li>
         </ul>
       </c:otherwise>
     </c:choose>
   </div>
+  
 </aside>
 
 <!-- Bottom Navigation -->
@@ -52,7 +53,7 @@
       <c:otherwise>
 
           <li><a href="${appURL}/signout"><span class="icon fa fa-sign-out"></span></a></li>
-          <li><a href="${appURL}/profile"><span class="icon fa fa-user"></span></a></li>
+          <li><a href="${appURL}/edit-profile"><span class="icon fa fa-user"></span></a></li>
 
       </c:otherwise>
     </c:choose>
@@ -68,7 +69,7 @@
 
   body {
     font-family: "Baloo Bhai 2";
-    background: #151f29;
+    background: #010f20;
     min-height: 100vh;
     color: white;
   }
@@ -83,7 +84,7 @@
     padding: 10px;
     position: fixed;
     min-height: 100vh;
-    background: linear-gradient(0deg, black, #1f314b);
+    background: linear-gradient(0deg, #c3ddff, #80adec);
     width: 300px;
     color: white;
     transition: .3s;
@@ -96,7 +97,7 @@
   }
 
   .menu-btn {
-    color: white;
+    color: #0b0b0b;
     position: absolute;
     top: 20px;
     right: 0;
@@ -108,7 +109,7 @@
     cursor: pointer;
     transform: translateX(100%);
     box-shadow: 2px 0px 5px 0px #1a1a1a;
-    background: #1b2b42;
+    background: #80adec;
   }
 
   .logo-wrapper {
@@ -122,7 +123,7 @@
 
   a {
     text-decoration: none;
-    color: white;
+    color: #0b0b0b;
   }
 
   .fa-uikit:before {
@@ -162,12 +163,33 @@
     padding: 10px;
     margin-bottom: 10px;
     overflow: hidden;
+    position: relative;
+    color: #333; /* Default text color */
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .menu-items a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #007bff; /* Underline color */
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
   }
 
   .menu-items a:hover {
-    color: #daddff;
-    background: #00000017;
+    color: #ffffff; /* Text color on hover */
     border-radius: 10px;
+  }
+
+  .menu-items a:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .menu-items li {
