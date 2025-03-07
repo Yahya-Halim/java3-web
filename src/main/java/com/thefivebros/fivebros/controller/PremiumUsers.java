@@ -1,4 +1,5 @@
 package com.thefivebros.fivebros.controller;
+
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,14 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/users")
-public class AdminUsers extends HttpServlet {
+@WebServlet("/chat")
+public class PremiumUsers extends HttpServlet {
     @Override
-    protected void doGet( HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         HttpSession session = req.getSession();
         User userFromSession = (User)session.getAttribute("activeUser");
-        if(userFromSession == null || !userFromSession.getStatus().equals("active") || !userFromSession.getPrivileges().equals("admin")) {
+        if(userFromSession == null || !userFromSession.getStatus().equals("active") || !userFromSession.getPrivileges().equals("premium")) {
             session.setAttribute("failureMessageWarning","Restricted page");
             resp.sendRedirect("login");
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -29,6 +31,7 @@ public class AdminUsers extends HttpServlet {
         List<User> users = UserDAO.getAll();
         req.setAttribute("users", users);
         req.setAttribute("pageTitle", "All Users");
-        req.getRequestDispatcher("WEB-INF/admin-users.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/chat.jsp").forward(req, resp);
+
     }
 }

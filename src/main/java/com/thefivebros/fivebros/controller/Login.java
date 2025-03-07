@@ -72,7 +72,7 @@ public class Login extends HttpServlet {
 
                 if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
                     user.setStatus("locked");
-                    UserDAO.update(user);
+                    UserDAO.userUpdate(email, user);
                     req.setAttribute("loginFail", "Your account has been locked due to too many failed login attempts. Please reset your password.");
                 } else {
                     req.setAttribute("loginFail", "The password you entered is incorrect. You have " + (MAX_LOGIN_ATTEMPTS - loginAttempts) + " attempts remaining.");
@@ -97,15 +97,17 @@ public class Login extends HttpServlet {
                 session.setAttribute("activeUser", user);
                 session.setAttribute("flashMessageSuccess", String.format("Welcome back%s!", (user.getFirstName() != null && !user.getFirstName().equals("") ? " " + user.getFirstName() : "")));
 
-                resp.sendRedirect(req.getContextPath()); // Redirects to the home page
+                //resp.sendRedirect(req.getContextPath()); // Redirects to the home page
+                // move here
+                if(redirect != null && !redirect.equals("")) {
+                    resp.sendRedirect(req.getContextPath() + "/" + redirect);
+                } else {
+                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/")); // Redirects to the home page
+                }
                 return;
 
             }
-            if(redirect != null && !redirect.equals("")) {
-                resp.sendRedirect(req.getContextPath() + "/" + redirect);
-            } else {
-                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/")); // Redirects to the home page
-            }
+
         }
 
 

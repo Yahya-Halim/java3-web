@@ -1,53 +1,54 @@
-<div class="container py-4">
-  <div class="row">
+<div class="container mx-auto py-4">
+  <div class="flex flex-col">
     <!-- Main content START -->
-    <div class="col-xl-12">
+    <div class="w-full">
       <!-- Title -->
-      <h1>All Users</h1>
-      <p class="lead">
+      <h1 class="text-2xl font-bold mb-2">All Users</h1>
+      <p class="text-lg text-gray-600 mb-4">
         <c:choose>
           <c:when test="${users.size() == 1}">There is 1 user</c:when>
           <c:otherwise>There are ${users.size()} users</c:otherwise>
         </c:choose>
       </p>
       <c:if test="${users.size() > 0}">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-50">
             <tr>
-              <th scope="col"></th>
-              <th scope="col">First name</th>
-              <th scope="col">Last name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Language</th>
-              <th scope="col">Status</th>
-              <th scope="col">Privileges</th>
-              <th scope="col">Created At</th>
-              <th scope="col">Timezone</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Language</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Privileges</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timezone</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-200">
             <c:forEach items="${users}" var="user">
-            <tr>
-              <td>
-                <a href="edit-user?user_id=${user.userId}" class="btn btn-sm btn-outline-primary">Edit</a>
-                <a href="delete-user?user_id=${user.userId}" class="btn btn-sm btn-outline-danger">Delete</a>
-              </td>
-              <td>${user.firstName}</td>
-              <td>${user.lastName}</td>
-              <td>${user.email}</td>
-              <td>${user.phone}</td>
-              <td>${user.language}</td>
-              <td>${user.status}</td>
-              <td>${user.privileges}</td>
-              <td>${user.createdAt}</td>
-              <td>${user.timezone}</td>
-              </c:forEach>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-black">
+                  <a href="edit-user?user_id=${user.userId}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
+                  <a href="delete-user?user_id=${user.userId}" class="text-red-600 hover:text-red-900">Delete</a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.firstName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.lastName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.email}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.phone}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.language}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.status}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.privileges}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.createdAt}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${user.timezone}</td>
+              </tr>
+            </c:forEach>
             </tbody>
           </table>
         </div>
       </c:if>
-    </div> <%-- Col END --%>
-  </div> <%-- Row END --%>
-</div> <%-- Container END --%>
+    </div> <!-- Col END -->
+  </div> <!-- Row END -->
+</div> <!-- Container END -->

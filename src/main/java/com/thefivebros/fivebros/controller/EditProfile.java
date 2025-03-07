@@ -44,44 +44,32 @@ public class EditProfile extends HttpServlet {
         req.setAttribute("phone", phone);
 
         HttpSession session = req.getSession();
-        User activeUser = (User)session.getAttribute("activeUser");
-
-
-        req.setAttribute("pageTitle", "Edit Profile");
-        req.getRequestDispatcher("WEB-INF/edit-profile.jsp").forward(req, resp);
+        User user = (User)session.getAttribute("activeUser");
         boolean errorFound = false;
-        try {
-            if(!firstName.equals(activeUser.getFirstName())) {
-                activeUser.setFirstName(firstName);
-            }
-        } catch(IllegalArgumentException e) {
-            errorFound = true;
-            req.setAttribute("firstNameError", e.getMessage());
+        if(firstName != null && !firstName.equals(user.getFirstName())) {
+            user.setFirstName(firstName);
         }
-
-        try {
-            if(!lastName.equals(activeUser.getLastName())) {
-                activeUser.setLastName(lastName);
-            }
-        } catch(IllegalArgumentException e) {
-            errorFound = true;
-            req.setAttribute("lastNameError", e.getMessage());
+        if(lastName != null && !lastName.equals(user.getLastName())) {
+            user.setLastName(lastName);
         }
-
-        if(email != null && !email.equals("") && !email.equals(activeUser.getEmail()) && UserDAO.get(email) != null) {
+        String originalEmail = user.getEmail();
+        if(email != null && !email.equals("") && !email.equals(user.getEmail()) && UserDAO.get(email) != null) {
             errorFound = true;
             req.setAttribute("emailError", "A user with that email already exists.");
         } else {
+            // The user entered an email address that doesn't exist.
             try {
-                activeUser.setEmail(email);
-            } catch(IllegalArgumentException e) {
+                user.setEmail(email);
+            } catch (IllegalArgumentException e) {
+                errorFound = true;
                 req.setAttribute("emailError", e.getMessage());
             }
         }
 
+
         try {
-            if(phone != null && !phone.equals(activeUser.getPhone())) {
-                activeUser.setPhone(phone);
+            if(phone != null && !phone.equals(user.getPhone())) {
+                user.setPhone(phone);
             }
         } catch(IllegalArgumentException e) {
             errorFound = true;
@@ -89,20 +77,31 @@ public class EditProfile extends HttpServlet {
         }
 
         try {
-            if(!language.equals(activeUser.getLanguage())) {
-                activeUser.setLanguage(language);
+            if(!language.equals(user.getLanguage())) {
+                user.setLanguage(language);
             }
         } catch(IllegalArgumentException e) {
             errorFound = true;
             req.setAttribute("languageError", e.getMessage());
         }
-        if (!errorFound) {
-            UserDAO.update(activeUser);
-            session.setAttribute("activeUser", activeUser);
-            session.setAttribute("flashMessageSuccess", "Your profile was updated");
-        } else {
-            session.setAttribute("flashMessageWarning", "Your profile was not updated");
+
+        if(!errorFound) {
+            boolean userUpdated = false;
+            try {
+                userUpdated = UserDAO.userUpdate(originalEmail, user);
+            } catch(RuntimeException e) {
+                session.setAttribute("flashMessageDanger", e.getMessage()); // Change to a message like "Your profile was not updated"
+
+
+            }
+            if(userUpdated) {
+                session.setAttribute("activeUser", user);
+                session.setAttribute("flashMessageSuccess", "Your profile was updated");
+
+            }
         }
+
+
 
         req.setAttribute("pageTitle", "Edit Profile");
         req.getRequestDispatcher("WEB-INF/edit-profile.jsp").forward(req, resp);
