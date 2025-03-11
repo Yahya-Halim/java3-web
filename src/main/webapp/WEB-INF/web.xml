@@ -27,7 +27,7 @@
     </context-param>
     <context-param>
         <param-name>appURLCloud</param-name>
-        <param-value>http://thefivebros.duckdns.org</param-value>
+        <param-value>http://thefivebrothers.azurewebsites.net/</param-value>
     </context-param>
     <context-param>
         <param-name>debugging</param-name>
