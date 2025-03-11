@@ -4,10 +4,7 @@ import com.thefivebros.shared.EmailThread;
 import jakarta.servlet.http.HttpServletRequest;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,7 +22,35 @@ public class UserDAO {
 //        user.setEmail("yoyo@test.com");
 //        user.setPassword("P@ssw0rd".toCharArray());
 //        add(user);
+
     }
+
+    public static List<BlogPost> getAllBlogs() {
+        List<BlogPost> blogPosts = new ArrayList<>();
+        String sql = "{CALL sp_get_blogs()}";
+
+        try (Connection conn = getConnection();
+             CallableStatement stmt = conn.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String author = rs.getString("first_name") + " " + rs.getString("last_name");
+                String content = rs.getString("content");
+                Timestamp createdAt = rs.getTimestamp("created_at");
+
+                blogPosts.add(new BlogPost(author, content, createdAt));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogPosts;
+    }
+
+
+
+
+
+
     public static String getPasswordReset(String token) {
         String email = getPasswordReset(token);
         try (Connection connection = getConnection();
@@ -241,5 +266,30 @@ public class UserDAO {
         }
     }
 
+    public static void insertBlog(int userId, String postContent) {
+        String sql = "{CALL sp_insert_blog(?, ?)}";
+
+        try (Connection conn = getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setString(2, postContent);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean delete(User user) {
+        try(Connection connection = getConnection()) {
+            CallableStatement statement = connection.prepareCall("{CALL sp_delete_user(?)}");
+            statement.setInt(1, user.getUserId());
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 

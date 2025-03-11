@@ -7,7 +7,7 @@
   <ul class="menu-items">
     <li><a href="${appURL}"><span class="icon fa fa-newspaper-o"></span><span class="item-name">home</span></a></li>
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class="item-name">About Us</span></a></li>
-    <li><a href="${appURL}/posts"><span class="icon fa fa-rocket"></span><span class="item-name">Posts</span></a></li>
+    <li><a href="${appURL}/post"><span class="icon fa fa-rocket"></span><span class="item-name">Posts</span></a></li>
     <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span><span class="item-name">contact</span></a></li>
     <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'admin'}">
         <li><a href="${appURL}/users"><span class="icon fa fa-users"></span><span class="item-name">All Users</span></a></li>

@@ -22,11 +22,35 @@
         </h1>
         <p class="text-lg md:text-xl my-3 font-mono text-teal-300">Discover the latest news, events, and updates about new technology.</p>
       </div>
-      <a href="${appURL}/signup" class="mt-4 md:mt-0">
-        <button class="bg-gradient-to-r from-teal-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-teal-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-teal-500/50">
-          Join Today
-        </button>
-      </a>
+      <div class="relative inline-flex items-center justify-center gap-4 group">
+        <div
+                class="absolute inset-0 duration-1000 opacity-60 transitiona-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
+        ></div>
+        <a
+                role="button"
+                class="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                title="payment"
+                href="${appURL}/signup"
+        >Get Started For Free<svg
+                aria-hidden="true"
+                viewBox="0 0 10 10"
+                height="10"
+                width="10"
+                fill="none"
+                class="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+        >
+          <path
+                  d="M0 5h7"
+                  class="transition opacity-0 group-hover:opacity-100"
+          ></path>
+          <path
+                  d="M1 1l4 4-4 4"
+                  class="transition group-hover:translate-x-[3px]"
+          ></path>
+        </svg>
+        </a>
+      </div>
+
     </div>
   </div>
 
