@@ -78,16 +78,43 @@ public class UserDAO {
     public static boolean updatePassword(String email, String password) {
         try (Connection connection = getConnection()) {
             if (connection != null) {
+                // Update the password
                 try (CallableStatement statement = connection.prepareCall("{CALL sp_update_user_password(?, ?)}")) {
                     statement.setString(1, email);
                     String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
                     statement.setString(2, encryptedPassword);
                     int rowsAffected = statement.executeUpdate();
-                    return rowsAffected == 1;
+
+                    if (rowsAffected == 1) {
+                        // Unlock the user account by setting status to 'active'
+                        User user = get(email);
+                        if (user != null) {
+                            user.setStatus("active");
+                            // Update the user's status in the database
+                            boolean statusUpdated = userUpdate(email, user);
+                            if (statusUpdated) {
+                                return true; // Both password and status updated successfully
+                            } else {
+                                // Log the error or handle it appropriately
+                                System.out.println("Failed to update user status.");
+                                return false;
+                            }
+                        } else {
+                            // Log the error or handle it appropriately
+                            System.out.println("User not found.");
+                            return false;
+                        }
+                    } else {
+                        // Log the error or handle it appropriately
+                        System.out.println("Failed to update password.");
+                        return false;
+                    }
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            // Log the exception or handle it appropriately
+            System.out.println("SQLException: " + e.getMessage());
+            return false;
         }
         return false;
     }
@@ -96,41 +123,62 @@ public class UserDAO {
 
 
 
+
     public static String passwordReset(String email, HttpServletRequest req) {
         User user = get(email);
-        if(user == null) {
+        if (user == null) {
             return "No user found that matches that email";
         } else {
-            try(Connection connection = getConnection()) {
+            try (Connection connection = getConnection()) {
                 String uuid = String.valueOf(UUID.randomUUID());
                 CallableStatement statement = connection.prepareCall("{call sp_add_password_reset(?,?)}");
                 statement.setString(1, email);
                 statement.setString(2, uuid);
                 int rowsAffected = statement.executeUpdate();
-                if(rowsAffected > 0) {
-                    // generate email html
+                if (rowsAffected > 0) {
+                    // Generate the email content
                     String subject = "Reset Password";
-                    String message = "<h2>Reset Password</h2>";
-                    message += "<p>Please click this link to securely reset your password. This link expires in 30 minutes.</p>";
-                    String appURL = "";
-                    if(req.isSecure()) {
-                        appURL = req.getServletContext().getInitParameter("appURLCloud");
-                    } else {
-                        appURL = req.getServletContext().getInitParameter("appURLLocal");
-                    }
+                    String appURL = req.isSecure() ?
+                            req.getServletContext().getInitParameter("appURLCloud") :
+                            req.getServletContext().getInitParameter("appURLLocal");
                     String fullURL = String.format("%s/new-password?token=%s", appURL, uuid);
-                    message += String.format("<p><a href=\"%s\" target=\"_blank\">%s</a></p>", fullURL, fullURL);
-                    message += "<p>If you did not request to reset your password, you can ignore this message and your password will not be changed.</p>";
-                    // send email
-                    EmailThread emailThread = new EmailThread(email, subject, message);
+
+                    // Create the email body using the tech-themed template
+                    String bodyContent = "<h2 style='color: #00ffcc; font-family: \"Courier New\", monospace;'>Reset Password</h2>" +
+                            "<p style='color: #ffffff; font-family: Arial, sans-serif;'>Please click this link to securely reset your password. This link expires in 30 minutes.</p>" +
+                            String.format("<p style='color: #ffffff; font-family: Arial, sans-serif;'><a href=\"%s\" target=\"_blank\" style='color: #00ffcc; text-decoration: none;'>%s</a></p>", fullURL, fullURL) +
+                            "<p style='color: #ffffff; font-family: Arial, sans-serif;'>If you did not request to reset your password, you can ignore this message and your password will not be changed.</p>";
+
+                    String htmlContent = "<html>" +
+                            "<head><style>" +
+                            "body { font-family: Arial, sans-serif; background-color: #1a1a1a; color: #ffffff; margin: 0; padding: 0; }" +
+                            ".container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #2a2a2a; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }" +
+                            ".header { font-size: 24px; font-weight: bold; color: #00ffcc; font-family: \"Courier New\", monospace; text-align: center; }" +
+                            ".body { margin-top: 20px; }" +
+                            ".footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }" +
+                            "a { color: #00ffcc; text-decoration: none; }" +
+                            "a:hover { text-decoration: underline; }" +
+                            "</style></head>" +
+                            "<body>" +
+                            "<div class='container'>" +
+                            "<div class='header'>Reset Password</div>" +
+                            "<div class='body'>" + bodyContent + "</div>" +
+                            "<div class='footer'>This email was sent by The Five Bro's. Please do not reply to this email.</div>" +
+                            "</div>" +
+                            "</body>" +
+                            "</html>";
+
+                    // Send the email
+                    EmailThread emailThread = new EmailThread(email, subject, htmlContent);
                     emailThread.start();
                     try {
                         emailThread.join();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+
                     String errorMessage = emailThread.getErrorMessage();
-                    if(errorMessage == null || errorMessage.isEmpty()) {
+                    if (errorMessage == null || errorMessage.isEmpty()) {
                         return "If there's an account associated with the email entered, we will send a password reset link.";
                     } else {
                         return errorMessage;
@@ -138,7 +186,7 @@ public class UserDAO {
                 } else {
                     return "Sorry, we couldn't process your password reset. Try again.";
                 }
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 return "SQLException " + e.getMessage();
             }
         }

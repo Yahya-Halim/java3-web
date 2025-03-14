@@ -60,24 +60,28 @@ public class Login extends HttpServlet {
             req.setAttribute("loginFail", "No user found with that email address. <a href=\"signup\">Sign-up</a>");
         } else {
             boolean passwordMatches = false;
+            boolean passwordReset = false;
             try {
                 passwordMatches = BCrypt.checkpw(password, String.valueOf(user.getPassword()));
+                passwordReset = UserDAO.updatePassword(email, password);
             } catch (Exception e) {
                 req.setAttribute("loginFail", "An error occurred."); // Use e.getMessage() to see the NoSuchAlgorithmException or InvalidKeySpecException
             }
 
-            if (!passwordMatches) {
-                loginAttempts++;
-                session.setAttribute("loginAttempts", loginAttempts);
+                    if (!passwordMatches) {
+                        loginAttempts++;
+                        session.setAttribute("loginAttempts", loginAttempts);
+        
+                        if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+                            user.setStatus("locked");
+                            UserDAO.userUpdate(email, user);
+                            req.setAttribute("loginFail", "Your account has been locked due to too many failed login attempts. Please reset your password.");
+                        } else {
 
-                if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
-                    user.setStatus("locked");
-                    UserDAO.userUpdate(email, user);
-                    req.setAttribute("loginFail", "Your account has been locked due to too many failed login attempts. Please reset your password.");
-                } else {
-                    req.setAttribute("loginFail", "The password you entered is incorrect. You have " + (MAX_LOGIN_ATTEMPTS - loginAttempts) + " attempts remaining.");
-                }
-            } else {
+                            req.setAttribute("loginFail", "The password you entered is incorrect. You have " + (MAX_LOGIN_ATTEMPTS - loginAttempts) + " attempts remaining.");
+
+                        }
+                    } else {
                 if (!user.getStatus().equals("active")) {
                     // The user's account is not active
                     req.setAttribute("loginFail", "Your account is locked or inactive. Please reset your password.");
