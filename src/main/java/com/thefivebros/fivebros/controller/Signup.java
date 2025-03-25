@@ -93,7 +93,7 @@ public class Signup extends HttpServlet {
                 session = req.getSession();
                 session.setAttribute("activeUser", user);
                 session.setAttribute("flashMessageSuccess", "User successfully added");
-                resp.sendRedirect(req.getContextPath());
+                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
                 return;
             }
         }
