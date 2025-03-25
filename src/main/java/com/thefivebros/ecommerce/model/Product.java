@@ -1,86 +1,88 @@
 package com.thefivebros.ecommerce.model;
 
+
 public class Product {
-    private String prod_id;
-    private String prod_name;
-    private double prod_price;
-    private String prod_desc;
-    private String vend_id;
-    private String vend_name;
+    private String id;
+    private String name;
+    private double price;
+    private String description;
+    private String vendorId;
+    private String vendorName;
 
-    public Product(String prod_id, String prod_name, double prod_price, String prod_desc, String vend_id, String vend_name) {
-        this.prod_id = prod_id;
-        this.prod_name = prod_name;
-        this.prod_price = prod_price;
-        this.prod_desc = prod_desc;
-        this.vend_id = vend_id;
-        this.vend_name = vend_name;
+    public Product() {}
+
+    // This constructor is for products on the shop page
+    public Product(String id, String name, double price, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+    // This constructor is for the admin view of products
+    public Product(String id, String name, double price, String description, String vendorId, String vendorName) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.vendorId = vendorId;
+        this.vendorName = vendorName;
     }
 
-    public Product(String prod_id, String prod_name, double prod_price, String prod_desc) {
-        this.prod_id = prod_id;
-        this.prod_name = prod_name;
-        this.prod_price = prod_price;
-        this.prod_desc = prod_desc;
-
-
+    public String getId() {
+        return id;
     }
 
-    public String getProd_id() {
-        return prod_id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setProd_id(String prod_id) {
-        this.prod_id = prod_id;
+    public String getName() {
+        return name;
     }
 
-    public String getProd_name() {
-        return prod_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getVend_id() {
-        return vend_id;
+    public double getPrice() {
+        return price;
     }
 
-    public void setVend_id(String vend_id) {
-        this.vend_id = vend_id;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getVend_name() {
-        return vend_name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setVend_name(String vend_name) {
-        this.vend_name = vend_name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setProd_name(String prod_name) {
-        this.prod_name = prod_name;
+    public String getVendorId() {
+        return vendorId;
     }
 
-    public double getProd_price() {
-        return prod_price;
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId;
     }
 
-    public void setProd_price(double prod_price) {
-        this.prod_price = prod_price;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public String getProd_desc() {
-        return prod_desc;
-    }
-
-    public void setProd_desc(String prod_desc) {
-        this.prod_desc = prod_desc;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "prod_id='" + prod_id + '\'' +
-                ", prod_name='" + prod_name + '\'' +
-                ", prod_price=" + prod_price +
-                ", prod_desc='" + prod_desc + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.thefivebros.ecommerce.controller;
 
+
 import com.thefivebros.ecommerce.model.Product;
 import com.thefivebros.ecommerce.model.ProductDAO;
 import com.thefivebros.fivebros.model.User;
@@ -14,8 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(value="/products")
-
-public class AdminProducts  extends  HttpServlet{
+public class AdminProducts extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -26,6 +26,6 @@ public class AdminProducts  extends  HttpServlet{
         }
         List<Product> products = ProductDAO.getProductsAdmin();
         req.setAttribute("products", products);
-        req.getRequestDispatcher("WEB-INF/ecommerce/admin-products.jsp").forward(req, resp);
+        req.getRequestDispatcher("WEB-INF/ecommerce/admin-product.jsp").forward(req, resp);
     }
 }

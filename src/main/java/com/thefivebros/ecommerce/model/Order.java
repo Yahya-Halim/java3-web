@@ -1,60 +1,67 @@
 package com.thefivebros.ecommerce.model;
 
 import java.time.Instant;
+import java.util.Date;
 
 public class Order {
-    // order_num, order_date, orders.cust_id, cust_name
-    private int order_num;
-    private Instant order_date;
-    private String cust_id;
-    private String cust_name;
+    private int orderNum;
+    private Instant orderDate;
+    private String customerId;
+    private String customerName;
 
-    public Order(int order_num, Instant order_date, String cust_id, String cust_name) {
-        this.order_num = order_num;
-        this.order_date = order_date;
-        this.cust_id = cust_id;
-        this.cust_name = cust_name;
+    public Order() {
     }
 
-    public int getOrder_num() {
-        return order_num;
+    public Order(int orderNum, Instant orderDate, String customerId, String customerName) {
+        this.orderNum = orderNum;
+        this.orderDate = orderDate;
+        this.customerId = customerId;
+        this.customerName = customerName;
     }
 
-    public void setOrder_num(int order_num) {
-        this.order_num = order_num;
+    public int getOrderNum() {
+        return orderNum;
     }
 
-    public Instant getOrder_date() {
-        return order_date;
+    public void setOrderNum(int orderNum) {
+        this.orderNum = orderNum;
     }
 
-    public void setOrder_date(Instant order_date) {
-        this.order_date = order_date;
+    public Instant getOrderDate() {
+        return orderDate;
     }
 
-    public String getCust_id() {
-        return cust_id;
+    public Date getOrderDateDate() {
+        return Date.from(orderDate);
     }
 
-    public void setCust_id(String cust_id) {
-        this.cust_id = cust_id;
+    public void setOrderDate(Instant orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public String getCust_name() {
-        return cust_name;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setCust_name(String cust_name) {
-        this.cust_name = cust_name;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "order_num=" + order_num +
-                ", order_date=" + order_date +
-                ", cust_id='" + cust_id + '\'' +
-                ", cust_name='" + cust_name + '\'' +
+                "orderNum=" + orderNum +
+                ", orderDate=" + orderDate +
+                ", customerId='" + customerId + '\'' +
+                ", customerName='" + customerName + '\'' +
                 '}';
     }
 }

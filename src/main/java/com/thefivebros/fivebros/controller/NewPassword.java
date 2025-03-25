@@ -1,5 +1,6 @@
 package com.thefivebros.fivebros.controller;
 
+
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
 import com.thefivebros.shared.EmailThread;
@@ -31,11 +32,11 @@ public class NewPassword extends HttpServlet {
         req.setAttribute("password1", password1);
         req.setAttribute("password2", password2);
         req.setAttribute("token", token);
-        User userPassword = new User();
-        boolean errorFound = false;
 
+        User user = new User();
+        boolean errorFound = false;
         try {
-            userPassword.setPassword(password1.toCharArray());
+            user.setPassword(password1.toCharArray());
         } catch(IllegalArgumentException e) {
             errorFound = true;
             req.setAttribute("password1Error", e.getMessage());
@@ -48,38 +49,30 @@ public class NewPassword extends HttpServlet {
             errorFound = true;
             req.setAttribute("password2Error", "Passwords don't match");
         }
-        if(token == null) {
+        if(token == null || token.equals("")) {
             req.setAttribute("newPasswordFail", "Invalid or missing token");
         }
 
-        if (!errorFound) {
+        if(!errorFound) {
             String email = UserDAO.getPasswordReset(token);
-            if (email == null || email.equals("")) {
-                req.setAttribute("newPasswordFail", "Token not found.");
+            if(email == null || email.equals("")) {
+                req.setAttribute("newPasswordFail", "Token not found");
             } else {
                 boolean passwordUpdated = UserDAO.updatePassword(email, password1);
-                if (passwordUpdated) {
-                    // Unlock the account by setting the status to "active"
-                    User user = UserDAO.get(email); // Retrieve the user by email
-                    if (user != null) {
-                        user.setStatus("active");
-                        boolean isUpdated = UserDAO.userUpdate(email, user);
-                        if (!isUpdated) {
-                            req.setAttribute("newPasswordFail", "An error occurred while unlocking your account. Please contact support.");
-                            req.getRequestDispatcher("WEB-INF/new-password.jsp").forward(req, resp);
-                            return;
-                        }
-                    }
-
-                    // Send email notification
+                if(passwordUpdated) {
+                    // Send confirmation email
                     String subject = "New Password Created";
-                    String message = "<h2>Your new password is created<h2>";
+                    String message = "<h2>New Password Created</h2>";
                     message += "<p>Your password has changed. If you suspect that someone else changed your password, please reset it with this link:</p>";
-                    String appURL = req.isSecure() ? req.getServletContext().getInitParameter("appURLCloud") : req.getServletContext().getInitParameter("appURLLocal");
+                    String appURL = "";
+                    if (req.isSecure()) {
+                        appURL = req.getServletContext().getInitParameter("appURLCloud");
+                    } else {
+                        appURL = req.getServletContext().getInitParameter("appURLLocal");
+                    }
                     String fullURL = String.format("%s/reset-password", appURL);
                     message += String.format("<p><a href=\"%s\" target=\"_blank\">%s</a></p>", fullURL, fullURL);
-                    message += "<p>If you did not request to reset your password, you can ignore this message and your password will not be changed.</p>";
-
+                    // send email
                     EmailThread emailThread = new EmailThread(email, subject, message);
                     emailThread.start();
                     try {
@@ -87,14 +80,13 @@ public class NewPassword extends HttpServlet {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-
-                    // Redirect to login page with success message
-                    HttpSession session = req.getSession();
+                    // Redirect the user to the login page
+                    HttpSession session = req.getSession(); // get an existing session if one exists
                     session.setAttribute("flashMessageSuccess", "New password has been created. Please sign in.");
-                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/login"));
+                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/login")); // Redirects the user to the login page
                     return;
                 } else {
-                    req.setAttribute("newPasswordFail", "Failed to update password. Please try again.");
+                    req.setAttribute("newPasswordFail", "Could not reset your password.");
                 }
             }
         }
@@ -102,6 +94,5 @@ public class NewPassword extends HttpServlet {
         req.setAttribute("pageTitle", "New password");
         req.getRequestDispatcher("WEB-INF/new-password.jsp").forward(req, resp);
     }
-
 }
 
