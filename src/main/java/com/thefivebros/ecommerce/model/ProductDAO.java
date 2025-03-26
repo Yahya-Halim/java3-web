@@ -11,22 +11,25 @@ import static com.thefivebros.shared.MySQL_Connect.getConnection;
 
 public class ProductDAO{
 
-    public static void main(String[] args) {
-        getProducts().forEach(System.out::println);
-    }
+
 
     // This method get products for the Shop page.
-    public static List<Product> getProducts() {
+    public static List<Product> getProducts(int limit, int offset, String categories) {
         List<Product> products = new ArrayList<>();
         try(Connection connection = getConnection()) {
-            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products()}");
+            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?,?,?)}");
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
+            statement.setString(3, categories);
             ResultSet rs = statement.executeQuery();
             while(rs.next()) {
                 String id = rs.getString("prod_id");
                 String name = rs.getString("prod_name");
                 double price = rs.getDouble("prod_price");
                 String description = rs.getString("prod_desc");
-                products.add(new Product(id, name, price, description));
+                int categoryId = rs.getInt("category_id");
+                String categoryName = rs.getString("name");
+                products.add(new Product(id, name, price, description, categoryId, categoryName));
             }
         } catch(SQLException e) {
             throw new RuntimeException("Database error - " + e.getMessage());
@@ -53,5 +56,22 @@ public class ProductDAO{
             throw new RuntimeException("Database error - " + e.getMessage());
         }
         return products;
+    }
+    public static List<ProductCategory> getAllCategories() {
+        List<ProductCategory> categories = new ArrayList<>();
+        try (Connection connection = getConnection();
+             CallableStatement statement = connection.prepareCall("{CALL sp_get_product_categories()}");
+             ResultSet resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int numProducts = resultSet.getInt("num_products");
+                categories.add(new ProductCategory(id, name, numProducts));
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return categories;
     }
 }

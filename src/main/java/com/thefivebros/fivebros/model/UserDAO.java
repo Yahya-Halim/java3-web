@@ -52,7 +52,7 @@ public class UserDAO {
 
 
     public static String getPasswordReset(String token) {
-        String email = getPasswordReset(token);
+        String email = "";
         try (Connection connection = getConnection();
              CallableStatement statement = connection.prepareCall("{CALL sp_get_password_reset(?)}")) {
             statement.setString(1, token);
@@ -78,47 +78,19 @@ public class UserDAO {
     public static boolean updatePassword(String email, String password) {
         try (Connection connection = getConnection()) {
             if (connection != null) {
-                // Update the password
                 try (CallableStatement statement = connection.prepareCall("{CALL sp_update_user_password(?, ?)}")) {
                     statement.setString(1, email);
                     String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
                     statement.setString(2, encryptedPassword);
                     int rowsAffected = statement.executeUpdate();
-
-                    if (rowsAffected == 1) {
-                        // Unlock the user account by setting status to 'active'
-                        User user = get(email);
-                        if (user != null) {
-                            user.setStatus("active");
-                            // Update the user's status in the database
-                            boolean statusUpdated = userUpdate(email, user);
-                            if (statusUpdated) {
-                                return true; // Both password and status updated successfully
-                            } else {
-                                // Log the error or handle it appropriately
-                                System.out.println("Failed to update user status.");
-                                return false;
-                            }
-                        } else {
-                            // Log the error or handle it appropriately
-                            System.out.println("User not found.");
-                            return false;
-                        }
-                    } else {
-                        // Log the error or handle it appropriately
-                        System.out.println("Failed to update password.");
-                        return false;
-                    }
+                    return rowsAffected == 1;
                 }
             }
         } catch (SQLException e) {
-            // Log the exception or handle it appropriately
-            System.out.println("SQLException: " + e.getMessage());
-            return false;
+            throw new RuntimeException(e);
         }
         return false;
     }
-
 
 
 

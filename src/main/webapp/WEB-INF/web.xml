@@ -37,10 +37,10 @@
         <error-code>404</error-code>
         <location>/fileNotFound</location>
     </error-page>
-    <error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/errorHandler</location>
-    </error-page>
+<!--    <error-page>-->
+<!--        <exception-type>java.lang.Throwable</exception-type>-->
+<!--        <location>/errorHandler</location>-->
+<!--    </error-page>-->
     <session-config>
         <session-timeout>60</session-timeout>
     </session-config>

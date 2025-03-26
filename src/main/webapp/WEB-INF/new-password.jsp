@@ -35,7 +35,7 @@
                   </div>
                 </div>
                 <!-- Hidden field -->
-                <input type="hidden" name="key" value="${key}">
+                <input type="hidden" name="token" value="${token}">
 
                 <!-- Button -->
                 <div class="align-items-center mt-0">
