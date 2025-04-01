@@ -10,6 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TimeZone;
+
+import static com.thefivebros.shared.Validators.isValidTimeZone;
 
 @WebServlet("/edit-profile")
 public class EditProfile extends HttpServlet {
@@ -83,6 +89,16 @@ public class EditProfile extends HttpServlet {
         } catch(IllegalArgumentException e) {
             errorFound = true;
             req.setAttribute("languageError", e.getMessage());
+        }
+        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
+
+        String timeZone = req.getParameter("timeZone"); // Get the value from the form
+
+        if (timeZone != null && isValidTimeZone(timeZone)) {
+            user.setTimezone(timeZone); // Update user profile
+        } else {
+            errorFound = true;
+            req.setAttribute("timeZoneError", "Invalid time zone selected.");
         }
 
         if(!errorFound) {

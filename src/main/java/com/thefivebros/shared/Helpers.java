@@ -18,4 +18,8 @@ public class Helpers {
         return Jsoup.parse(html).text();
     }
 
+    public static void main(String[] args) {
+        java.util.Arrays.asList(java.util.TimeZone.getAvailableIDs()).forEach(System.out::println);
+    }
+
 }

@@ -74,4 +74,19 @@ public class ProductDAO{
         }
         return categories;
     }
+    public static int getProductCount(String categories) {
+        try(Connection connection = getConnection();
+            CallableStatement statement = connection.prepareCall("{CALL sp_get_total_products(?)}");
+        ) {
+            statement.setString(1, categories);
+            try(ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("total_products");
+                }
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
 }

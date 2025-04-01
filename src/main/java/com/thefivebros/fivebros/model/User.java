@@ -5,6 +5,8 @@ import com.thefivebros.shared.Validators;
 import java.time.Instant;
 import java.util.Date;
 
+import static com.thefivebros.shared.Validators.isValidTimeZone;
+
 public class User implements Comparable<User> {
     private int userId;
     private String firstName;
@@ -164,9 +166,12 @@ public class User implements Comparable<User> {
     }
 
     public void setTimezone(String timezone) {
-        this.timezone = timezone;
+        if (isValidTimeZone(timezone)) {
+            this.timezone = timezone;
+        } else {
+            throw new IllegalArgumentException("Invalid time zone selected.");
+        }
     }
-
     @Override
     public String toString() {
         return "User{" +

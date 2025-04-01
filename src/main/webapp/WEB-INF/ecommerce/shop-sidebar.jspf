@@ -11,13 +11,12 @@
                 <!-- Category START -->
                 <div class="card card-body shadow p-4 mb-4">
                     <!-- Title -->
-                    <h4 class="mb-2">Category</h4>
+                    <h4 class="mb-2 text-black">Category</h4>
                     <c:forEach var="category" items="${productCategories}">
                         <!-- Checkbox -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="filter-${category.id}" name="categories" value="${category.id}" <c:if test="${fn:contains(categories, category.id)}">checked</c:if>>
-                            <label class="form-check-label" for="filter-${category.id}">${category.name} (${category.numProducts})</label>
-                        </div>
+                            <label class="form-check-label text-black" for="filter-${category.id}">${category.name} (${category.numProducts})</label>                        </div>
                     </c:forEach>
                 </div>
                 <!-- Category END -->
