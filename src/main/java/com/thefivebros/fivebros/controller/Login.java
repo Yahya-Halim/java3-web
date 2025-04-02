@@ -60,10 +60,8 @@ public class Login extends HttpServlet {
             req.setAttribute("loginFail", "No user found with that email address. <a href=\"signup\">Sign-up</a>");
         } else {
             boolean passwordMatches = false;
-            boolean passwordReset = false;
             try {
                 passwordMatches = BCrypt.checkpw(password, String.valueOf(user.getPassword()));
-                passwordReset = UserDAO.updatePassword(email, password);
             } catch (Exception e) {
                 req.setAttribute("loginFail", "An error occurred."); // Use e.getMessage() to see the NoSuchAlgorithmException or InvalidKeySpecException
             }
@@ -92,8 +90,10 @@ public class Login extends HttpServlet {
 
                 // Successful login
                 user.setPassword(null); // Remove the password before setting the User object as a session attribute
+                        UserDAO.deletePasswordReset(user.getEmail());
 
-                session.invalidate(); // Remove any existing session attributes
+
+                        session.invalidate(); // Remove any existing session attributes
                 session = req.getSession(); // Create new HttpSession
                 if (rememberMe != null && rememberMe[0].equals("true")) {
                     session.setMaxInactiveInterval(30 * 24 * 60 * 60); // represented in seconds

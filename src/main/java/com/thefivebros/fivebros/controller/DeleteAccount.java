@@ -39,18 +39,17 @@ public class DeleteAccount extends HttpServlet {
         User user = (User)session.getAttribute("activeUser");
 
         boolean errorFound = false;
-        User userFromDatabase = UserDAO.get(email);
-        if(userFromDatabase == null) {
+        if(!email.equals(user.getEmail())) {
             errorFound = true;
-            session.setAttribute("flashMessageWarning", "You entered the wrong email.");
-
+            session.setAttribute("flashMessageWarning", "The value you entered is not the same as '" + user.getEmail() + "'.");
         }
-        if(!errorFound){
+
+        if(!errorFound) {
             boolean deleted = UserDAO.delete(user);
             if(deleted) {
                 session.invalidate();
                 session = req.getSession();
-                session.setAttribute("flashMessageSuccess", "Your account has been deleted.");
+                session.setAttribute("flashMessageWarning", "Your account has been deleted.");
                 resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
                 return;
             }

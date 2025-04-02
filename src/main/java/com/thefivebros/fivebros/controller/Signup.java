@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 
 @WebServlet("/signup")
 public class Signup extends HttpServlet {
@@ -88,6 +89,7 @@ public class Signup extends HttpServlet {
 
             if (userAdded) {
                 user.setPassword(null);
+                user.setCreatedAt(Instant.now());
                 HttpSession session = req.getSession();
                 session.invalidate();
                 session = req.getSession();

@@ -28,7 +28,7 @@ public class ProductDAO{
                 double price = rs.getDouble("prod_price");
                 String description = rs.getString("prod_desc");
                 int categoryId = rs.getInt("category_id");
-                String categoryName = rs.getString("name");
+                String categoryName = rs.getString("category_name");
                 products.add(new Product(id, name, price, description, categoryId, categoryName));
             }
         } catch(SQLException e) {

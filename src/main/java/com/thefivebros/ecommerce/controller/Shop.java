@@ -65,6 +65,12 @@ public class Shop extends HttpServlet {
         if(lastProductShown > totalProducts) {
             lastProductShown = totalProducts;
         }
+        // Calculate begin and end page links
+        int pageLinks = 5;
+        int beginPage = page / pageLinks * pageLinks > 0 ? page / pageLinks * pageLinks : 1;
+        int endPage = beginPage + pageLinks - 1 > totalPages ? totalPages : beginPage + pageLinks - 1;
+        req.setAttribute("beginPage", beginPage);
+        req.setAttribute("endPage", endPage);
         req.setAttribute("lastProductShown", lastProductShown);
 
         List<Product> products = ProductDAO.getProducts(limit, offset, categories);
