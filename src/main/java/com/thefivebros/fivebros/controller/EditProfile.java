@@ -90,16 +90,16 @@ public class EditProfile extends HttpServlet {
             errorFound = true;
             req.setAttribute("languageError", e.getMessage());
         }
-        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
+//        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
 
-        String timeZone = req.getParameter("timeZone"); // Get the value from the form
-
-        if (timeZone != null && isValidTimeZone(timeZone)) {
-            user.setTimezone(timeZone); // Update user profile
-        } else {
-            errorFound = true;
-            req.setAttribute("timeZoneError", "Invalid time zone selected.");
-        }
+//        String timeZone = req.getParameter("timeZone"); // Get the value from the form
+//
+//        if (timeZone != null && isValidTimeZone(timeZone)) {
+//            user.setTimezone(timeZone); // Update user profile
+//        } else {
+//            errorFound = true;
+//            req.setAttribute("timeZoneError", "Invalid time zone selected.");
+//        }
 
         if(!errorFound) {
             boolean userUpdated = false;

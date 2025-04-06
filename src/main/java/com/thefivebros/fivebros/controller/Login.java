@@ -90,10 +90,10 @@ public class Login extends HttpServlet {
 
                 // Successful login
                 user.setPassword(null); // Remove the password before setting the User object as a session attribute
-                        UserDAO.deletePasswordReset(user.getEmail());
+                UserDAO.deletePasswordReset(user.getEmail());
 
 
-                        session.invalidate(); // Remove any existing session attributes
+                session.invalidate(); // Remove any existing session attributes
                 session = req.getSession(); // Create new HttpSession
                 if (rememberMe != null && rememberMe[0].equals("true")) {
                     session.setMaxInactiveInterval(30 * 24 * 60 * 60); // represented in seconds

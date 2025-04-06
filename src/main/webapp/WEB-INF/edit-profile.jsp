@@ -67,7 +67,7 @@
                 <!-- Language Preference -->
                 <div class="col-md-6">
                   <label class="form-label text-white" for="language">Language</label>
-                  <select class="form-select js-choice z-index-9 bg-transparent ${not empty languageError ? 'is-invalid' : ''}"
+                  <select class="form-select js-choice z-index-9 bg-white ${not empty languageError ? 'is-invalid' : ''}"
                           id="language" name="language">
                     <option value="en-US" ${sessionScope.activeUser.language == 'en-US' ? 'selected' : ''}>English</option>
                     <option value="es-MX" ${sessionScope.activeUser.language == 'es-MX' ? 'selected' : ''}>Spanish</option>

@@ -50,6 +50,7 @@ public class NewPassword extends HttpServlet {
             req.setAttribute("password2Error", "Passwords don't match");
         }
         if(token == null || token.equals("")) {
+            errorFound = true;
             req.setAttribute("newPasswordFail", "Invalid or missing token");
         }
 
@@ -80,6 +81,15 @@ public class NewPassword extends HttpServlet {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    // get user by email
+                    // set the user's status from locked to active
+                    // update the database
+                    user = UserDAO.get(email);
+                    if (user != null && "locked".equals(user.getStatus())) {
+                        user.setStatus("active");
+                        UserDAO.userUpdate(email, user);
+                    }
+
                     // Redirect the user to the login page
                     HttpSession session = req.getSession(); // get an existing session if one exists
                     session.setAttribute("flashMessageSuccess", "New password has been created. Please sign in.");

@@ -17,7 +17,7 @@ import static com.thefivebros.shared.MySQL_Connect.getConnection;
 public class UserDAO {
     public static void main(String[] args) {
 //        getAll().forEach(System.out::println);
-//        System.out.println(get("yahyamohamed11no1@gmail.com"));
+        System.out.println(get("yahyamohamed11no1@gmail.com"));
 //        User user = new User();
 //        user.setEmail("yoyo@test.com");
 //        user.setPassword("P@ssw0rd".toCharArray());
