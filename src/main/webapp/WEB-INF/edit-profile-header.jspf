@@ -1,3 +1,15 @@
+<jsp:useBean id="calendar" class="java.util.GregorianCalendar" scope="page" />
+<%
+    // Assuming userLocalTime is set as request attribute or session attribute
+    java.util.Date userLocalTime = (java.util.Date) request.getAttribute("userLocalTime");
+    if (userLocalTime != null) {
+        calendar.setTime(userLocalTime);
+    } else {
+        calendar.setTime(new java.util.Date()); // Fallback to current server time
+    }
+    int hour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
+    request.setAttribute("userHour", hour);
+%>
 <section class="my-4">
     <div class="container mx-auto px-4">
         <div class="flex flex-wrap">
@@ -8,7 +20,17 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <jsp:useBean id="now" class="java.util.Date" scope="page" />
-                            <h4 class="text-2xl font-semibold text-black">Good morning<c:if test="${not empty activeUser.firstName}">, ${fn:escapeXml(activeUser.firstName)} </c:if>!</h4>
+                            <c:choose>
+                                <c:when test="${userHour lt 12}">
+                                    <h4 class="text-2xl font-semibold text-black">Good morning<c:if test="${not empty activeUser.firstName}">, ${fn:escapeXml(activeUser.firstName)}</c:if>!</h4>
+                                </c:when>
+                                <c:when test="${userHour lt 18}">
+                                    <h4 class="text-2xl font-semibold text-black">Good afternoon<c:if test="${not empty activeUser.firstName}">, ${fn:escapeXml(activeUser.firstName)}</c:if>!</h4>
+                                </c:when>
+                                <c:otherwise>
+                                    <h4 class="text-2xl font-semibold text-black">Good evening<c:if test="${not empty activeUser.firstName}">, ${fn:escapeXml(activeUser.firstName)}</c:if>!</h4>
+                                </c:otherwise>
+                            </c:choose>
                             <ul class="list-none space-y-1 mt-2">
                                 <li class="flex items-center text-black-700">
                                     <i class="bi bi-calendar-event-fill text-lg mr-2 text-black">Todays date: <fmt:formatDate value="${date}" pattern="MMMM d, YYYY h:mm a z" />

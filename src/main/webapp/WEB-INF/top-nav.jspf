@@ -32,7 +32,7 @@
   <ul class="menu-items">
     <li><a href="${appURL}"><span class="icon fa fa-newspaper-o"></span><span class="item-name">home</span></a></li>
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class="item-name">About Us</span></a></li>
-    <li><a href="${appURL}/post"><span class="icon fa fa-rocket"></span><span class="item-name">Posts</span></a></li>
+    <li><a href="${appURL}/blog"><span class="icon fa fa-rocket"></span><span class="item-name">Posts</span></a></li>
     <li><a href="${appURL}/connect-four"><span class="icon fa fa-rocket"></span><span class="item-name">Games</span></a></li>
 
     <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span><span class="item-name">contact</span></a></li>
@@ -46,6 +46,11 @@
           <li><a class="dropdown-item" href="${appURL}/orders">All Orders</a></li>
         </ul>
       </li>
+      <a href="${appURL}/cart" class="btn btn-primary">
+                        <i class="bi bi-cart"></i>
+                        ${cart.totalProductCount},
+                        ${cart.totalPrice}
+      </a>
     </c:if>
     <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'premium'}">
       <li><a href="${appURL}/chat"><span class="icon fa fa-users"></span><span class="item-name">Chat</span></a></li>

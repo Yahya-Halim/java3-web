@@ -25,26 +25,7 @@ public class UserDAO {
 
     }
 
-    public static List<BlogPost> getAllBlogs() {
-        List<BlogPost> blogPosts = new ArrayList<>();
-        String sql = "{CALL sp_get_blogs()}";
 
-        try (Connection conn = getConnection();
-             CallableStatement stmt = conn.prepareCall(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                String author = rs.getString("first_name") + " " + rs.getString("last_name");
-                String content = rs.getString("content");
-                Timestamp createdAt = rs.getTimestamp("created_at");
-
-                blogPosts.add(new BlogPost(author, content, createdAt));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return blogPosts;
-    }
     public static void deletePasswordReset(String email) {
         try (Connection connection = getConnection();
              CallableStatement statement = connection.prepareCall("{CALL sp_delete_password_reset(?)}")) {

@@ -1,6 +1,5 @@
 package com.thefivebros.ecommerce.model;
 
-
 public class Product {
     private String id;
     private String name;
@@ -30,6 +29,14 @@ public class Product {
         this.description = description;
         this.vendorId = vendorId;
         this.vendorName = vendorName;
+    }
+
+    // This constructor is for product verification during add-to-cart process
+    public Product(String id, String name, double price, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
     }
 
     public String getId() {
