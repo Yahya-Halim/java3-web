@@ -21,39 +21,39 @@
                                     <hr class="my-4">
 
                                     <c:forEach items="${cart.contents}" var="entry">
-                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
-                                        <div class="col-md-5">
-                                            <%-- entry.key refers to the product --%>
-                                            <h6 class="mb-0">${entry.key.name}</h6>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <form method="POST" action="${appURL}/cart" class="d-flex justify-content-center align-items-end">
-                                                <input type="hidden" name="prod_id" value="${entry.key.id}">
-                                                <input type="hidden" name="action" value="update">
-                                                <div class="input-group w-50">
-                                                    <div class="">
-                                                        <%-- entry.value refers to the Integer, the product quantity--%>
-                                                        <input id="quantity" min="0" name="quantity" value="${entry.value}" type="number"
-                                                               class="form-control form-control-sm" />
+                                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                            <div class="col-md-5">
+                                                    <%-- entry.key refers to the product --%>
+                                                <h6 class="mb-0">${entry.key.name}</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <form method="POST" action="${appURL}/cart" class="d-flex justify-content-center align-items-end">
+                                                    <input type="hidden" name="prod_id" value="${entry.key.id}">
+                                                    <input type="hidden" name="action" value="update">
+                                                    <div class="input-group w-50">
+                                                        <div class="">
+                                                                <%-- entry.value refers to the Integer, the product quantity--%>
+                                                            <input id="quantity" min="0" name="quantity" value="${entry.value}" type="number"
+                                                                   class="form-control form-control-sm" />
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
-                                            </form>
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-2 text-end">
+                                                <h6 class="mb-0"><fmt:formatNumber value="${entry.key.price}" type="currency"></fmt:formatNumber></h6>
+                                            </div>
+                                            <div class="col-md-1 text-end">
+                                                <form method="POST" action="${appURL}/cart" class="d-flex justify-content-center align-items-end">
+                                                    <input type="hidden" name="prod_id" value="${entry.key.id}">
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <button type="submit" class="text-muted"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 text-end">
-                                            <h6 class="mb-0"><fmt:formatNumber value="${entry.key.price}" type="currency"></fmt:formatNumber></h6>
-                                        </div>
-                                        <div class="col-md-1 text-end">
-                                            <form method="POST" action="${appURL}/cart" class="d-flex justify-content-center align-items-end">
-                                                <input type="hidden" name="prod_id" value="${entry.key.id}">
-                                                <input type="hidden" name="action" value="delete">
-                                                <button type="submit" class="text-muted"><i class="bi bi-trash"></i></button>
-                                            </form>
-                                        </div>
-                                    </div>
 
-                                    <hr class="my-4">
+                                        <hr class="my-4">
                                     </c:forEach>
 
                                     <div class="pt-5">
@@ -84,9 +84,10 @@
                                         <%-- Add shipping, subtract discount --%>
                                         <h5><fmt:formatNumber value="${cart.totalPrice}" type="currency"></fmt:formatNumber></h5>
                                     </div>
-
-                                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
-                                             data-mdb-ripple-color="dark">Check out</button>
+                                    <form action="${appURL}/checkout" method="GET">
+                                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
+                                                data-mdb-ripple-color="dark">Check out</button>
+                                    </form>
 
                                 </div>
                             </div>

@@ -6,7 +6,7 @@ const wsUri = wsProtocol + document.location.host + document.location.pathname +
 const websocket = new WebSocket(wsUri);
 
 websocket.onopen = function (event) {
-    // console.log("opened websocket: " + wsUri);
+    console.log("opened websocket: " + wsUri);
 };
 
 websocket.onmessage = function (event) {
