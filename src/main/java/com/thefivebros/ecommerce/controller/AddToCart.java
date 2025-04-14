@@ -2,6 +2,7 @@ package com.thefivebros.ecommerce.controller;
 
 import com.thefivebros.ecommerce.model.Product;
 import com.thefivebros.ecommerce.model.ProductDAO;
+import com.thefivebros.ecommerce.model.ShoppingCart;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -42,6 +43,12 @@ public class AddToCart extends HttpServlet {
         if(errorFound) {
             session.setAttribute("flashMessageDanger", errorMsg);
         } else {
+            ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+            if(cart == null){
+                cart = new ShoppingCart();
+            }
+            cart.addProduct(product, quantity);
+            session.setAttribute("cart", cart);
             session.setAttribute("flashMessageSuccess", "Added to cart successfully");
         }
         resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/shop"));

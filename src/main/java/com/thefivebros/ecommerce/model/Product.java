@@ -1,5 +1,7 @@
 package com.thefivebros.ecommerce.model;
 
+import java.util.Objects;
+
 public class Product {
     private String id;
     private String name;
@@ -103,6 +105,8 @@ public class Product {
         this.categoryName = categoryName;
     }
 
+    
+
     @Override
     public String toString() {
         return "Product{" +
@@ -111,5 +115,17 @@ public class Product {
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(price, product.price) == 0 && Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(description, product.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price, description);
     }
 }

@@ -17,6 +17,12 @@ import java.util.List;
 public class Shop extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String minPriceStr = req.getParameter("minPrice");
+        String maxPriceStr = req.getParameter("maxPrice");
+        Double minPrice = (minPriceStr != null && !minPriceStr.isEmpty()) ? Double.parseDouble(minPriceStr) : null;
+        Double maxPrice = (maxPriceStr != null && !maxPriceStr.isEmpty()) ? Double.parseDouble(maxPriceStr) : null;
+        req.setAttribute("minPrice", minPrice);
+        req.setAttribute("maxPrice", maxPrice);
         // Get the limit (number of products to show)
         String limitStr = req.getParameter("limit");
         int limit = 10;

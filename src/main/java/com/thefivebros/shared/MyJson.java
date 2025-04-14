@@ -1,4 +1,4 @@
-package com.thefivebros.shared.sockets;
+package com.thefivebros.shared;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -6,6 +6,7 @@ import jakarta.json.JsonObject;
 import java.io.StringWriter;
 
 public class MyJson {
+
     private JsonObject json;
 
     public MyJson(JsonObject json) {
@@ -20,10 +21,9 @@ public class MyJson {
         this.json = json;
     }
 
-    @Override
     public String toString() {
         StringWriter writer = new StringWriter();
-        Json.createWriter(writer).write(json);
+        Json.createWriter(writer).write(this.json);
         return writer.toString();
     }
 }

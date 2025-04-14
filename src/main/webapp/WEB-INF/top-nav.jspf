@@ -1,39 +1,16 @@
+
 <aside class="sidebar">
   <button class="menu-btn fa fa-chevron-left"></button>
   <a href="${appURL}" class="logo-wrapper">
     <span class="fa-brands fa-uikit"></span>
     <span class="brand-name">THE FIVE BRO'S</span>
   </a>
-  <div class="relative px-4 py-3">
-    <form id="searchForm" class="relative w-full transition-all duration-300">
-      <!-- Search Icon -->
-      <button type="button" id="searchToggle"
-              class="absolute left-3 top-1/2 -translate-y-1/2 p-1 transition-all duration-300">
-        <svg width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700">
-          <path d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9" stroke="currentColor"
-                stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </button>
 
-      <!-- Search Input -->
-      <input id="searchBox" type="text"
-             class="w-full rounded-full px-10 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
-             placeholder="Search..." required />
-
-      <!-- Reset Button -->
-      <button type="reset" id="clearSearch"
-              class="absolute right-3 top-1/2 -translate-y-1/2 p-1 hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </form>
-  </div>
   <ul class="menu-items">
     <li><a href="${appURL}"><span class="icon fa fa-newspaper-o"></span><span class="item-name">home</span></a></li>
     <li><a href="${appURL}/aboutUs"><span class="icon fa fa-layer-group"></span><span class="item-name">About Us</span></a></li>
     <li><a href="${appURL}/blog"><span class="icon fa fa-rocket"></span><span class="item-name">Posts</span></a></li>
-    <li><a href="${appURL}/connect-four"><span class="icon fa fa-rocket"></span><span class="item-name">Games</span></a></li>
+    <li><a href="${appURL}/shop"><span class="icon fa fa-store"></span><span class="item-name">Shop</span></a></li>
 
     <li><a href="${appURL}/contact"><span class="icon fa fa-phone"></span><span class="item-name">contact</span></a></li>
     <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'admin'}">
@@ -46,18 +23,15 @@
           <li><a class="dropdown-item" href="${appURL}/orders">All Orders</a></li>
         </ul>
       </li>
-      <a href="${appURL}/cart" class="btn btn-primary">
-                        <i class="bi bi-cart"></i>
-                        ${cart.totalProductCount},
-                        ${cart.totalPrice}
-      </a>
     </c:if>
     <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'premium'}">
       <li><a href="${appURL}/chat"><span class="icon fa fa-users"></span><span class="item-name">Chat</span></a></li>
     </c:if>
 
   </ul>
+
   <div class="text-end">
+
     <c:choose>
       <c:when test="${empty sessionScope.activeUser}">
         <ul class="menu-items">
@@ -394,7 +368,7 @@
     document.body.classList.toggle("collapsed");
     e.currentTarget.classList.toggle("fa-chevron-right");
     e.currentTarget.classList.toggle("fa-chevron-left");
-  })
+  });
   document.addEventListener("DOMContentLoaded", function () {
     const searchBox = document.getElementById("searchBox");
     const clearSearch = document.getElementById("clearSearch");

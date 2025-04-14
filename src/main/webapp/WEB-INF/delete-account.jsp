@@ -11,15 +11,15 @@
           <div class="card border bg-transparent rounded-3 mb-0">
             <!-- Card header -->
             <div class="card-header bg-transparent border-bottom">
-              <h3 class="card-header-title mb-0">Delete Account</h3>
+              <h3 class="card-header-title mb-0 text-white">Delete Account</h3>
             </div>
             <!-- Card body -->
             <div class="card-body">
-              <h6>If you delete your account, you will lose your all data.</h6>
+              <h6 class="form-label text-white">If you delete your account, you will lose your all data.</h6>
               <form method="POST" action="${appURL}/delete-account">
                 <!-- Email id -->
                 <div class="col-md-6 my-4">
-                  <label class="form-label" for="email">Enter your email to confirm account deletion</label>
+                  <label class="form-label text-white" for="email">Enter your email to confirm account deletion</label>
                   <input class="form-control <c:if test="${not empty results.emailError}">is-invalid</c:if>" type="text" id="email" name="email" value="${email}">
                   <c:if test="${not empty results.emailError }"><div class="invalid-feedback">${results.emailError}</div></c:if>
                 </div>

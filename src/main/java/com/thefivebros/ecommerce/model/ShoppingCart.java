@@ -11,9 +11,32 @@ public class ShoppingCart {
     }
 
     public void addProduct(Product product, int quantity) {
+        if(product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if(quantity < 1) {
+            throw new IllegalArgumentException("Quantity cannot be less than 1");
+        }
         contents.put(product, contents.getOrDefault(product, 0) + quantity);
     }
 
+    public void updateProduct(Product product, int quantity) {
+        if(product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if(quantity < 1) {
+            throw new IllegalArgumentException("Quantity cannot be less than 1");
+        }
+        contents.put(product, quantity);
+    }
+    public void deleteProduct(Product product) {
+        if(product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
+        if(contents.containsKey(product)) {
+            contents.remove(product);
+        }
+    }
     public Map<Product, Integer> getContents() {
         return contents;
     }
@@ -30,7 +53,9 @@ public class ShoppingCart {
     public double getTotalPrice() {
         double total = 0;
         for(Map.Entry<Product, Integer> entry: contents.entrySet()) {
-
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+            total += product.getPrice() * quantity;
         }
         return total;
     }
@@ -51,5 +76,7 @@ public class ShoppingCart {
         });
         System.out.println("There are " + sc.getTotalProductCount() + " products in your cart");
     }
+
+
 }
 

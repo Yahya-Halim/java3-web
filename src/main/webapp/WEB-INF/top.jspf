@@ -38,6 +38,7 @@
           crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfRe9oqAAAAAIOxxur3EtZjGRmq82ue8jmkTXPK" async defer></script>
+  <script src="/scripts/group-chat.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script>
     grecaptcha.enterprise.ready(function() {
@@ -82,5 +83,17 @@
 
 
   </div>
+  <div class="container mt-3">
+  <div class="d-flex justify-content-end">
+    <a href="${appURL}/cart" class="btn btn-primary">
+      <i class="bi bi-cart"></i>
+      ${cart.totalProductCount}
+      <c:if test="${not empty cart}">, </c:if>
+      ${cart.totalPrice}
+    </a>
+
+
+  </div>
+</div>
 
 </main>

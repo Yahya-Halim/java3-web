@@ -97,7 +97,7 @@ public class ProductDAO{
     public static Product getProduct(String id) {
         Product product = null;
         try(Connection connection = getConnection()) {
-            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_product(?)}");
+            CallableStatement statement = connection.prepareCall("{CALL sp_get_product(?)}");
             statement.setString(1, id);
             ResultSet rs = statement.executeQuery();
             if(rs.next()) {

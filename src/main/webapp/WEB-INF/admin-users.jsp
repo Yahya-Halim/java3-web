@@ -34,15 +34,15 @@
                   <a href="edit-user?user_id=${user.userId}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
                   <a href="delete-user?user_id=${user.userId}" class="text-red-600 hover:text-red-900">Delete</a>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.firstName}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.lastName}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.email}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.phone}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.language}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.status}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.privileges}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.createdAt}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${user.timezone}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.firstName)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.lastName)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.email)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.phone)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.language)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.status)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.privileges)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.createdAt)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.timezone)}</td>
               </tr>
             </c:forEach>
             </tbody>
