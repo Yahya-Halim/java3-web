@@ -1,5 +1,7 @@
 package com.thefivebros.shared;
 
+import org.joda.time.DateTimeZone;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,10 +64,14 @@ public class Validators {
         Matcher matcher = pattern.matcher(language);
         return matcher.matches();
     }
-    public static boolean isValidTimeZone(String timeZone) {
-        String regex = "^(Pacific\\(Bougainville|Chatham|Chuuk|Easter|Efate|Enderbury|Fakaofo|Fiji|Funafuti|Galapagos|Gambier|Guadalcanal|Guam|Honolulu|Johnston|Kanton|Kiritimati|Kosrae|Kwajalein|Majuro|Marquesas|Midway|Nauru|Niue|Norfolk|Noumea|Pago_Pago|Palau|Pitcairn|Pohnpei|Ponape|Port_Moresby|Rarotonga|Saipan|Samoa|Tahiti|Tarawa|Tongatapu|Truk|Wake|Wallis|Yap)|Poland)$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(timeZone);
-        return matcher.matches();
+    public static boolean isValidTimeZone(String timezone) {
+        try {
+            // Try to get the DateTimeZone for the given timezone
+            DateTimeZone.forID(timezone);
+            return true;  // If no exception is thrown, it's a valid time zone
+        } catch (IllegalArgumentException e) {
+            // If an exception is thrown, it's an invalid time zone
+            return false;
+        }
     }
 }

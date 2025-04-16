@@ -77,6 +77,19 @@
                     <div class="invalid-feedback">${languageError}</div>
                   </c:if>
                 </div>
+                <!-- Time Zone -->
+                <div class="col-md-6">
+                  <label class="form-label text-white" for="timeZone">Time Zone</label>
+                  <select class="form-select js-choice z-index-9 bg-white ${not empty timeZoneError ? 'is-invalid' : ''}"
+                          id="timeZone" name="timeZone">
+                    <c:forEach var="tz" items="${availableTimeZones}">
+                      <option value="${tz}" ${tz == sessionScope.activeUser.timezone ? 'selected' : ''}>${tz}</option>
+                    </c:forEach>
+                  </select>
+                  <c:if test="${not empty timeZoneError}">
+                    <div class="invalid-feedback">${timeZoneError}</div>
+                  </c:if>
+                </div>
 
                 
 

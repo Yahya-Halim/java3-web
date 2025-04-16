@@ -1,6 +1,7 @@
 package com.thefivebros.fivebros.model;
 
 import com.thefivebros.shared.Validators;
+import org.joda.time.DateTimeZone;
 
 import java.time.Instant;
 import java.util.Date;
@@ -164,7 +165,6 @@ public class User implements Comparable<User> {
     public String getTimezone() {
         return timezone;
     }
-
     public void setTimezone(String timezone) {
         if (isValidTimeZone(timezone)) {
             this.timezone = timezone;
@@ -172,6 +172,8 @@ public class User implements Comparable<User> {
             throw new IllegalArgumentException("Invalid time zone selected.");
         }
     }
+
+
     @Override
     public String toString() {
         return "User{" +

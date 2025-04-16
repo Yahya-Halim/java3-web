@@ -22,6 +22,8 @@ public class EditProfile extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
+        req.setAttribute("availableTimeZones", availableTimeZones);
         HttpSession session = req.getSession();
         User user = (User)session.getAttribute("activeUser");
         if(user == null) {
@@ -90,16 +92,26 @@ public class EditProfile extends HttpServlet {
             errorFound = true;
             req.setAttribute("languageError", e.getMessage());
         }
-//        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
+        String timeZone = req.getParameter("timeZone");
+        Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
 
-//        String timeZone = req.getParameter("timeZone"); // Get the value from the form
-//
-//        if (timeZone != null && isValidTimeZone(timeZone)) {
-//            user.setTimezone(timeZone); // Update user profile
-//        } else {
-//            errorFound = true;
-//            req.setAttribute("timeZoneError", "Invalid time zone selected.");
-//        }
+        if (timeZone != null && availableTimeZones.contains(timeZone)) {
+            user.setTimezone(timeZone);  // Valid time zone, update user profile
+        } else {
+            errorFound = true;
+            req.setAttribute("timeZoneError", "Invalid time zone selected.");
+        }
+        try {
+            if (timeZone != null && availableTimeZones.contains(timeZone)) {
+                user.setTimezone(timeZone);
+            } else {
+                errorFound = true;
+                req.setAttribute("timeZoneError", "Invalid time zone selected.");
+            }
+        } catch (IllegalArgumentException e) {
+            errorFound = true;
+            req.setAttribute("timeZoneError", e.getMessage());
+        }
 
         if(!errorFound) {
             boolean userUpdated = false;
