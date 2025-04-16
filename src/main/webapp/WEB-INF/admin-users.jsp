@@ -41,7 +41,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.language)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.status)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.privileges)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.createdAt)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-black"><fmt:formatDate value="${user.createdAtDate}" pattern="MMMM d, YYYY h:mm a z" /></td>
                 <td class="px-6 py-4 whitespace-nowrap text-black">${fn:escapeXml(user.timezone)}</td>
               </tr>
             </c:forEach>
