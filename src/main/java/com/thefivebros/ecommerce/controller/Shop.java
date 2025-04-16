@@ -1,6 +1,5 @@
 package com.thefivebros.ecommerce.controller;
 
-
 import com.thefivebros.ecommerce.model.Product;
 import com.thefivebros.ecommerce.model.ProductCategory;
 import com.thefivebros.ecommerce.model.ProductDAO;
@@ -17,21 +16,22 @@ import java.util.List;
 public class Shop extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // Get price range filters
         String minPriceStr = req.getParameter("minPrice");
         String maxPriceStr = req.getParameter("maxPrice");
         Double minPrice = (minPriceStr != null && !minPriceStr.isEmpty()) ? Double.parseDouble(minPriceStr) : null;
         Double maxPrice = (maxPriceStr != null && !maxPriceStr.isEmpty()) ? Double.parseDouble(maxPriceStr) : null;
         req.setAttribute("minPrice", minPrice);
         req.setAttribute("maxPrice", maxPrice);
-        // Get the limit (number of products to show)
+
+        // Get limit
         String limitStr = req.getParameter("limit");
         int limit = 10;
         try {
             limit = Integer.parseInt(limitStr);
         } catch (NumberFormatException e) {
-            if (limit < 0) {
-                limit = 10;
-            }
+            limit = 10;
         }
         req.setAttribute("limit", limit);
 
@@ -43,46 +43,64 @@ public class Shop extends HttpServlet {
         }
         req.setAttribute("categories", categories);
 
-        // Get the total product count
+        // Get total product count
         int totalProducts = ProductDAO.getProductCount(categories);
         int totalPages = totalProducts / limit;
-        if(totalProducts % limit != 0) {
+        if (totalProducts % limit != 0) {
             totalPages++;
         }
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("totalProducts", totalProducts);
 
-        // Get the page number
+        // Get current page
         String pageStr = req.getParameter("page");
         int page = 1;
         try {
             page = Integer.parseInt(pageStr);
-        } catch (NumberFormatException e) {
-
-        }
+        } catch (NumberFormatException ignored) {}
         req.setAttribute("page", page);
+
         int offset = (page - 1) * limit;
 
-        // Determine first and last products shown
-        int firstProductShown = 1 + (page - 1) * limit;
-        req.setAttribute("firstProductShown", firstProductShown);
-
-        int lastProductShown = limit + (page - 1) * limit;
-        if(lastProductShown > totalProducts) {
+        // First and last products on page
+        int firstProductShown = 1 + offset;
+        int lastProductShown = limit + offset;
+        if (lastProductShown > totalProducts) {
             lastProductShown = totalProducts;
         }
-        // Calculate begin and end page links
-        int pageLinks = 5;
-        int beginPage = page / pageLinks * pageLinks > 0 ? page / pageLinks * pageLinks : 1;
-        int endPage = beginPage + pageLinks - 1 > totalPages ? totalPages : beginPage + pageLinks - 1;
-        req.setAttribute("beginPage", beginPage);
-        req.setAttribute("endPage", endPage);
+        req.setAttribute("firstProductShown", firstProductShown);
         req.setAttribute("lastProductShown", lastProductShown);
 
+        // Page navigation range
+        int pageLinks = 5;
+        int beginPage = (page - 1) / pageLinks * pageLinks + 1;
+        int endPage = beginPage + pageLinks - 1;
+        if (endPage > totalPages) {
+            endPage = totalPages;
+        }
+        req.setAttribute("beginPage", beginPage);
+        req.setAttribute("endPage", endPage);
+
+        // Get product list
         List<Product> products = ProductDAO.getProducts(limit, offset, categories);
+
+        // Filter by min/max price
+        if (minPrice != null || maxPrice != null) {
+            products.removeIf(p -> (minPrice != null && p.getPrice() < minPrice) ||
+                    (maxPrice != null && p.getPrice() > maxPrice));
+        }
+
+        // Sort by price ascending
+        products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+        // For descending: use Double.compare(p2.getPrice(), p1.getPrice())
+
         req.setAttribute("products", products);
+
+        // Get all categories
         List<ProductCategory> productCategories = ProductDAO.getAllCategories();
         req.setAttribute("productCategories", productCategories);
+
+        // Forward to shop.jsp
         req.getRequestDispatcher("WEB-INF/ecommerce/shop.jsp").forward(req, resp);
     }
 }

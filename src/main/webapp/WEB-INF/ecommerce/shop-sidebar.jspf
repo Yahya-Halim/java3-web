@@ -4,27 +4,41 @@
     <div class="offcanvas-lg offcanvas-end" tabindex="-1" id="offcanvasSidebar">
         <div class="offcanvas-header bg-light">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Advanced Filter</h5>
-            <button  type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-3">
             <form method="GET" action="${appURL}/shop">
+
                 <!-- Category START -->
                 <div class="card card-body shadow p-4 mb-4">
-                    <!-- Title -->
                     <h4 class="mb-2 text-black">Category</h4>
                     <c:forEach var="category" items="${productCategories}">
-                        <!-- Checkbox -->
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="filter-${category.id}" name="categories" value="${category.id}" <c:if test="${fn:contains(categories, category.id)}">checked</c:if>>
-                            <label class="form-check-label text-black" for="filter-${category.id}">${category.name} (${category.numProducts})</label>                        </div>
+                            <input class="form-check-input" type="checkbox" id="filter-${category.id}" name="categories" value="${category.id}"
+                                   <c:if test="${fn:contains(categories, category.id)}">checked</c:if>>
+                            <label class="form-check-label text-black" for="filter-${category.id}">
+                                ${category.name} (${category.numProducts})
+                            </label>
+                        </div>
                     </c:forEach>
                 </div>
                 <!-- Category END -->
 
+                <!-- Price Filter START -->
+                <div class="card card-body shadow p-4 mb-4 text-black">
+                    <h4 class="mb-2 text-black">Price Range</h4>
+                    <div class="mb-3">
+                        <label for="minPrice" class="form-label">Min Price</label>
+                        <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="${category.minPrice}">                    </div>
+                    <div class="mb-3">
+                        <label for="maxPrice" class="form-label">Max Price</label>
+                        <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="${category.maxPrice}">                    </div>
+                </div>
+                <!-- Price Filter END -->
+
                 <!-- Limit START -->
                 <div class="card card-body shadow p-4">
-                    <!-- Title -->
-                    <h4 class="mb-2">Show</h4>
+                    <h4 class="mb-2 text-black ">Show</h4>
                     <div class="btn-group" role="group" aria-label="Show radio toggle button group">
                         <input type="radio" class="btn-check" id="show-5" autocomplete="off" name="limit" value="5" <c:if test="${limit eq 5}">checked</c:if>>
                         <label class="btn btn-outline-success" for="show-5">5</label>
@@ -37,11 +51,13 @@
                     </div>
                 </div>
                 <!-- Limit END -->
+
                 <!-- Submit Button -->
                 <div class="d-grid text-center m-4">
                     <button type="submit" class="btn btn-primary">Filter Results</button>
                 </div>
-            </form><!-- Form End -->
-        </div><!-- offcanvas-body End -->
-    </div><!-- Responsive offcanvas body END -->
-</div><!-- Right sidebar END -->
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Right sidebar END -->
