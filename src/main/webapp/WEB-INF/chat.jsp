@@ -9,15 +9,18 @@
 </div>
 
 <!-- Chat Widget -->
-<div id="chatWidget" class="fixed bottom-20 right-6 z-40 hidden">
+<div id="chatWidget" class="fixed bottom-20 right-6 z-40 hidden transition-all duration-300 ease-in-out">
+
     <div class="bg-white rounded-lg shadow-lg w-96 h-[500px] flex flex-col overflow-hidden">
         <!-- Chat Header -->
         <div class="bg-[#0077b5] text-white p-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <img src="https://via.placeholder.com/40" alt="Profile" class="w-10 h-10 rounded-full">
                 <div>
-                    <h2 class="font-semibold">Chat</h2>
-                    <p class="text-sm text-gray-200">Active now</p>
+
+<h2                     class="font-semibold">
+                            Chat<c:if test="${not empty activeUser.firstName}">, ${fn:escapeXml(activeUser.firstName)}</c:if>
+                    </h2>
                 </div>
             </div>
             <button id="closeChat" class="text-gray-200 hover:text-white">
@@ -34,13 +37,24 @@
 
         <!-- Chat Input Area -->
         <div class="p-4 border-t border-gray-200">
-            <form id="messageForm" class="flex items-center space-x-2">
-                <input type="text" id="messageInput" placeholder="Type a message..." class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077b5]">
-                <button type="submit" class="bg-[#0077b5] text-white p-2 rounded-lg hover:bg-[#005f8a] transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                </button>
+            <form id="messageForm" class="flex flex-col gap-2">
+                <!-- Hidden or replace with actual name input -->
+                <input type="hidden" id="userName" value="${fn:escapeXml(activeUser.firstName)}" />
+
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="message" placeholder="Type a message..."
+                           class="flex-1 p-2 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0077b5]">
+                    <button type="submit"
+                            class="bg-[#0077b5] text-white p-2 rounded-lg hover:bg-[#005f8a] transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <p id="errorText" class="text-red-500 text-sm hidden"></p>
             </form>
         </div>
     </div>
@@ -62,3 +76,16 @@
         background: #555;
     }
 </style>
+<script>
+    const chatToggle = document.getElementById('chatToggle');
+    const chatWidget = document.getElementById('chatWidget');
+    const closeChat = document.getElementById('closeChat');
+
+    chatToggle.addEventListener('click', () => {
+        chatWidget.classList.toggle('hidden');
+    });
+
+    closeChat.addEventListener('click', () => {
+        chatWidget.classList.add('hidden');
+    });
+</script>

@@ -1,9 +1,6 @@
 package com.thefivebros.ecommerce.model;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +13,28 @@ public class ProductDAO{
     }
 
     // This method get products for the Shop page.
-    public static List<Product> getProducts(int limit, int offset, String categories) {
+    public static List<Product> getProducts(int limit, int offset, String categories, Double minPrice, Double maxPrice) {
         List<Product> products = new ArrayList<>();
-        try(Connection connection = getConnection()) {
-            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?,?,?)}");
+        try (Connection connection = getConnection()) {
+            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?, ?, ?, ?, ?)}");
             statement.setInt(1, limit);
             statement.setInt(2, offset);
             statement.setString(3, categories);
+
+            if (minPrice != null) {
+                statement.setDouble(4, minPrice);
+            } else {
+                statement.setNull(4, Types.DECIMAL);
+            }
+
+            if (maxPrice != null) {
+                statement.setDouble(5, maxPrice);
+            } else {
+                statement.setNull(5, Types.DECIMAL);
+            }
+
             ResultSet rs = statement.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String id = rs.getString("prod_id");
                 String name = rs.getString("prod_name");
                 double price = rs.getDouble("prod_price");
@@ -33,11 +43,12 @@ public class ProductDAO{
                 String categoryName = rs.getString("category_name");
                 products.add(new Product(id, name, price, description, categoryId, categoryName));
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Database error - " + e.getMessage());
         }
         return products;
     }
+
 
     // This method get products for the Admin page.
     public static List<Product> getProductsAdmin() {

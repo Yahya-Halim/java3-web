@@ -8,6 +8,30 @@
         </div>
         <div class="offcanvas-body p-3">
             <form method="GET" action="${appURL}/shop">
+<%--                <!-- Search Box with Dropdown START -->--%>
+<%--                <div class="p-4 mb-4 position-relative">--%>
+<%--                    <!-- Search Icon -->--%>
+<%--                    <button type="submit" class="position-absolute start-0 top-50 translate-middle-y px-3 border-0 bg-transparent">--%>
+<%--                        <i class="bi bi-search text-secondary"></i>--%>
+<%--                    </button>--%>
+
+<%--                    <!-- Search Input -->--%>
+<%--                    <input id="searchBox" type="text" name="query"--%>
+<%--                           class="form-control rounded-pill ps-5 pe-5 py-2 shadow-sm"--%>
+<%--                           placeholder="Search products or categories..." required />--%>
+
+<%--                    <!-- Clear Button -->--%>
+<%--                    <button type="reset" id="clearSearch"--%>
+<%--                            class="position-absolute end-0 top-50 translate-middle-y px-3 border-0 bg-transparent d-none">--%>
+<%--                        <i class="bi bi-x-circle text-secondary"></i>--%>
+<%--                    </button>--%>
+
+<%--                    <!-- Search Results Dropdown -->--%>
+<%--                    <div id="searchResultsDropdown" class="dropdown-menu w-100" aria-labelledby="searchBox">--%>
+<%--                        <!-- This will be dynamically populated using JavaScript or AJAX -->--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--                <!-- Search Box with Dropdown END -->--%>
 
                 <!-- Category START -->
                 <div class="card card-body shadow p-4 mb-4">
@@ -22,6 +46,9 @@
                         </div>
                     </c:forEach>
                 </div>
+
+
+
                 <!-- Category END -->
 
                 <!-- Price Filter START -->
@@ -29,16 +56,18 @@
                     <h4 class="mb-2 text-black">Price Range</h4>
                     <div class="mb-3">
                         <label for="minPrice" class="form-label">Min Price</label>
-                        <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="${category.minPrice}">                    </div>
+                        <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="${minPrice}">
+                    </div>
                     <div class="mb-3">
                         <label for="maxPrice" class="form-label">Max Price</label>
-                        <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="${category.maxPrice}">                    </div>
+                        <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="${maxPrice}">
+                    </div>
                 </div>
                 <!-- Price Filter END -->
 
                 <!-- Limit START -->
-                <div class="card card-body shadow p-4">
-                    <h4 class="mb-2 text-black ">Show</h4>
+                <div class="card card-body shadow p-4 mb-4">
+                    <h4 class="mb-2 text-black">Show</h4>
                     <div class="btn-group" role="group" aria-label="Show radio toggle button group">
                         <input type="radio" class="btn-check" id="show-5" autocomplete="off" name="limit" value="5" <c:if test="${limit eq 5}">checked</c:if>>
                         <label class="btn btn-outline-success" for="show-5">5</label>
@@ -56,8 +85,11 @@
                 <div class="d-grid text-center m-4">
                     <button type="submit" class="btn btn-primary">Filter Results</button>
                 </div>
+
             </form>
         </div>
     </div>
 </div>
 <!-- Right sidebar END -->
+
+

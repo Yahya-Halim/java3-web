@@ -28,8 +28,8 @@ public class PremiumUsers extends HttpServlet {
 
         }
 
-        List<User> users = UserDAO.getAll();
-        req.setAttribute("users", users);
+
+
         req.setAttribute("pageTitle", "chat");
         req.getRequestDispatcher("WEB-INF/chat.jsp").forward(req, resp);
 
