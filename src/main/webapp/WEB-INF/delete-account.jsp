@@ -15,16 +15,22 @@
             </div>
             <!-- Card body -->
             <div class="card-body">
-              <h6 class="form-label text-white">If you delete your account, you will lose your all data.</h6>
-              <form method="POST" action="${appURL}/delete-account">
+              <h6 class="form-label text-white">If you delete your account, you will lose all your data.</h6>
+              <form id="deleteForm" method="POST" action="${appURL}/delete-account">
                 <!-- Email id -->
                 <div class="col-md-6 my-4">
                   <label class="form-label text-white" for="email">Enter your email to confirm account deletion</label>
-                  <input class="form-control <c:if test="${not empty results.emailError}">is-invalid</c:if>" type="text" id="email" name="email" value="${email}">
-                  <c:if test="${not empty results.emailError }"><div class="invalid-feedback">${results.emailError}</div></c:if>
+                  <input class="form-control <c:if test="${not empty results.emailError}">is-invalid</c:if>"
+                         type="text" id="email" name="email" value="${email}">
+                  <c:if test="${not empty results.emailError}">
+                    <div class="invalid-feedback">${results.emailError}</div>
+                  </c:if>
                 </div>
 
-                <button type="submit" class="btn btn-danger mb-0">Delete my account</button>
+                <!-- Trigger the modal instead of submitting -->
+                <button type="button" class="btn btn-danger mb-0" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                  Delete my account
+                </button>
               </form>
             </div>
           </div>
@@ -32,6 +38,27 @@
         </div>
         <!-- Main content END -->
       </div><!-- Row END -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-black">
+            Are you sure you want to delete your account? This action cannot be undone.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit();">
+              Yes, delete my account
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </main>
