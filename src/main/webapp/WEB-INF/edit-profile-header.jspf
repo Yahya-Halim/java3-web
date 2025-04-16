@@ -33,7 +33,7 @@
                             </c:choose>
                             <ul class="list-none space-y-1 mt-2">
                                 <li class="list-item text-black">
-                                    <i class="bi bi-calendar-event-fill fs-6"></i> Today is <fmt:formatDate value="${now}" pattern="MMMM d, YYYY h:mm a z" timeZone="${active.timezone}" />
+                                    <i class="bi bi-calendar-event-fill fs-6"></i> Today is <fmt:formatDate value="${now}" pattern="MMMM d, YYYY h:mm a z" timeZone="${activeUser.timezone}" />
                                 </li>
                                 <li class="flex items-center text-black-700">
                                     <i class="bi bi-star-fill text-lg mr-2 text-black"> Member since <fmt:formatDate value="${activeUser.createdAtDate}" dateStyle="long" /></i>
