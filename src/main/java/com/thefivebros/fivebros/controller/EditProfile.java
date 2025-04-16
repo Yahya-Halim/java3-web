@@ -2,6 +2,7 @@ package com.thefivebros.fivebros.controller;
 
 import com.thefivebros.fivebros.model.User;
 import com.thefivebros.fivebros.model.UserDAO;
+import com.thefivebros.shared.Validators;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,6 +25,8 @@ public class EditProfile extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Set<String> availableTimeZones = new HashSet<>(Arrays.asList(TimeZone.getAvailableIDs()));
         req.setAttribute("availableTimeZones", availableTimeZones);
+        req.setAttribute("timeZones", Validators.getSortedTimeZones());
+
         HttpSession session = req.getSession();
         User user = (User)session.getAttribute("activeUser");
         if(user == null) {

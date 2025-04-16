@@ -2,6 +2,9 @@ package com.thefivebros.shared;
 
 import org.joda.time.DateTimeZone;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,5 +76,10 @@ public class Validators {
             // If an exception is thrown, it's an invalid time zone
             return false;
         }
+    }
+    public static List<String> getSortedTimeZones() {
+        List<String> timeZones = new ArrayList<>(DateTimeZone.getAvailableIDs());
+        Collections.sort(timeZones); // Sort A–Z
+        return timeZones;
     }
 }

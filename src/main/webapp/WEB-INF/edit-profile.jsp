@@ -80,10 +80,9 @@
                 <!-- Time Zone -->
                 <div class="col-md-6">
                   <label class="form-label text-white" for="timeZone">Time Zone</label>
-                  <select class="form-select js-choice z-index-9 bg-white ${not empty timeZoneError ? 'is-invalid' : ''}"
-                          id="timeZone" name="timeZone">
-                    <c:forEach var="tz" items="${availableTimeZones}">
-                      <option value="${tz}" ${tz == sessionScope.activeUser.timezone ? 'selected' : ''}>${tz}</option>
+                  <select class="form-select ${not empty timeZoneError ? 'is-invalid' : ''}" id="timeZone" name="timeZone">
+                    <c:forEach var="tz" items="${timeZones}">
+                      <option value="${tz}" ${sessionScope.activeUser.timezone == tz ? 'selected' : ''}>${tz}</option>
                     </c:forEach>
                   </select>
                   <c:if test="${not empty timeZoneError}">
