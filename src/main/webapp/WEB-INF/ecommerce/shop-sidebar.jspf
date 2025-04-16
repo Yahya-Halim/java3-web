@@ -8,30 +8,7 @@
         </div>
         <div class="offcanvas-body p-3">
             <form method="GET" action="${appURL}/shop">
-<%--                <!-- Search Box with Dropdown START -->--%>
-<%--                <div class="p-4 mb-4 position-relative">--%>
-<%--                    <!-- Search Icon -->--%>
-<%--                    <button type="submit" class="position-absolute start-0 top-50 translate-middle-y px-3 border-0 bg-transparent">--%>
-<%--                        <i class="bi bi-search text-secondary"></i>--%>
-<%--                    </button>--%>
 
-<%--                    <!-- Search Input -->--%>
-<%--                    <input id="searchBox" type="text" name="query"--%>
-<%--                           class="form-control rounded-pill ps-5 pe-5 py-2 shadow-sm"--%>
-<%--                           placeholder="Search products or categories..." required />--%>
-
-<%--                    <!-- Clear Button -->--%>
-<%--                    <button type="reset" id="clearSearch"--%>
-<%--                            class="position-absolute end-0 top-50 translate-middle-y px-3 border-0 bg-transparent d-none">--%>
-<%--                        <i class="bi bi-x-circle text-secondary"></i>--%>
-<%--                    </button>--%>
-
-<%--                    <!-- Search Results Dropdown -->--%>
-<%--                    <div id="searchResultsDropdown" class="dropdown-menu w-100" aria-labelledby="searchBox">--%>
-<%--                        <!-- This will be dynamically populated using JavaScript or AJAX -->--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <!-- Search Box with Dropdown END -->--%>
 
                 <!-- Category START -->
                 <div class="card card-body shadow p-4 mb-4">
@@ -64,6 +41,17 @@
                     </div>
                 </div>
                 <!-- Price Filter END -->
+
+                <!-- Sort A-Z / Z-A START -->
+                <div class="card card-body shadow p-4 mb-4">
+                    <h4 class="mb-2 text-black">Sort By</h4>
+                    <select class="form-select" name="sort">
+                        <option value="">-- Select --</option>
+                        <option value="az" <c:if test="${sort eq 'az'}">selected</c:if>>Name: A to Z</option>
+                        <option value="za" <c:if test="${sort eq 'za'}">selected</c:if>>Name: Z to A</option>
+                    </select>
+                </div>
+                <!-- Sort A-Z / Z-A END -->
 
                 <!-- Limit START -->
                 <div class="card card-body shadow p-4 mb-4">

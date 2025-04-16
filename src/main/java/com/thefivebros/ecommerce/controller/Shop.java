@@ -15,11 +15,9 @@ import java.util.List;
 @WebServlet(value = "/shop")
 public class Shop extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        // Get search query
-        String searchQuery = req.getParameter("searchQuery");
-        req.setAttribute("searchQuery", searchQuery);
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String sort = req.getParameter("sort");
+        req.setAttribute("sort", sort);
 
         // Get price range filters
         String minPriceStr = req.getParameter("minPrice");
@@ -28,14 +26,15 @@ public class Shop extends HttpServlet {
         Double maxPrice = (maxPriceStr != null && !maxPriceStr.isEmpty()) ? Double.parseDouble(maxPriceStr) : null;
         req.setAttribute("minPrice", minPrice);
         req.setAttribute("maxPrice", maxPrice);
-
-        // Get limit
+        // Get the limit (number of products to show)
         String limitStr = req.getParameter("limit");
         int limit = 10;
         try {
             limit = Integer.parseInt(limitStr);
         } catch (NumberFormatException e) {
-            limit = 10;
+            if (limit < 0) {
+                limit = 10;
+            }
         }
         req.setAttribute("limit", limit);
 
@@ -45,36 +44,55 @@ public class Shop extends HttpServlet {
         if (categoriesArr != null && categoriesArr.length > 0) {
             categories = String.join(",", categoriesArr);
         }
-        req.setAttribute("categories", categories);
+        req.setAttribute("categoriesArr", categoriesArr);
 
-        // Get total product count
+        // Get the total product count and page count
+        int totalProducts = ProductDAO.getProductCount(categories);
+        int totalPages = totalProducts / limit;
+        if(totalProducts % limit != 0) {
+            totalPages++;
+        }
+        req.setAttribute("totalPages", totalPages);
+        req.setAttribute("totalProducts", totalProducts);
 
-
-
-
-        // Get current page
+        // Get the page number
         String pageStr = req.getParameter("page");
         int page = 1;
         try {
             page = Integer.parseInt(pageStr);
-        } catch (NumberFormatException ignored) {}
-        req.setAttribute("page", page);
+        } catch (NumberFormatException e) {
 
+        }
+        if(page > totalPages) {
+            page = totalPages;
+        } else if(page < 1) {
+            page = 1;
+        }
+        req.setAttribute("page", page);
         int offset = (page - 1) * limit;
 
-        // Get product list
-        List<Product> products = ProductDAO.getProducts(limit, offset, categories, minPrice, maxPrice);
 
-        // Sort by price ascending
-        products.sort((p1, p2) -> Double.compare(p1.getPrice(), p2.getPrice()));
+        // Calculate begin and end page links
+        int pageLinks = 5;
+        int beginPage = page / pageLinks * pageLinks > 0 ? page / pageLinks * pageLinks : 1;
+        int endPage = beginPage + pageLinks - 1 > totalPages ? totalPages : beginPage + pageLinks - 1;
+        req.setAttribute("beginPage", beginPage);
+        req.setAttribute("endPage", endPage);
 
+        // Determine first and last products shown
+        int firstProductShown = 1 + (page - 1) * limit;
+        req.setAttribute("firstProductShown", firstProductShown);
+
+        int lastProductShown = limit + (page - 1) * limit;
+        if(lastProductShown > totalProducts) {
+            lastProductShown = totalProducts;
+        }
+        req.setAttribute("lastProductShown", lastProductShown);
+
+        List<Product> products = ProductDAO.getProducts(limit, offset, categories, minPrice, maxPrice, sort);
         req.setAttribute("products", products);
-
-        // Get all categories
         List<ProductCategory> productCategories = ProductDAO.getAllCategories();
         req.setAttribute("productCategories", productCategories);
-
-        // Forward to shop.jsp
         req.getRequestDispatcher("WEB-INF/ecommerce/shop.jsp").forward(req, resp);
     }
 }

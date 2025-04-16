@@ -13,7 +13,7 @@ public class ProductDAO{
     }
 
     // This method get products for the Shop page.
-    public static List<Product> getProducts(int limit, int offset, String categories, Double minPrice, Double maxPrice) {
+    public static List<Product> getProducts(int limit, int offset, String categories, Double minPrice, Double maxPrice, String sort) {
         List<Product> products = new ArrayList<>();
         try (Connection connection = getConnection()) {
             CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?, ?, ?, ?, ?)}");
@@ -43,6 +43,14 @@ public class ProductDAO{
                 String categoryName = rs.getString("category_name");
                 products.add(new Product(id, name, price, description, categoryId, categoryName));
             }
+
+            // Apply sorting AFTER fetching data
+            if ("az".equalsIgnoreCase(sort)) {
+                products.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
+            } else if ("za".equalsIgnoreCase(sort)) {
+                products.sort((p1, p2) -> p2.getName().compareToIgnoreCase(p1.getName()));
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException("Database error - " + e.getMessage());
         }
