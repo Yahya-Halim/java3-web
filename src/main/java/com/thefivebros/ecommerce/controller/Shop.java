@@ -19,7 +19,9 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
         String sort = req.getParameter("sort");
         req.setAttribute("sort", sort);
 
-        // Get price range filters
+
+
+            // Get price range filters
         String minPriceStr = req.getParameter("minPrice");
         String maxPriceStr = req.getParameter("maxPrice");
         Double minPrice = (minPriceStr != null && !minPriceStr.isEmpty()) ? Double.parseDouble(minPriceStr) : null;
