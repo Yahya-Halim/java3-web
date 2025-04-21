@@ -26,6 +26,10 @@ public class Signup extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String plan = req.getParameter("plan");
+        if ("premium".equalsIgnoreCase(plan)) {
+            req.setAttribute("isPremium", true);
+        }
         String email = req.getParameter("email");
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
@@ -87,7 +91,9 @@ public class Signup extends HttpServlet {
                 req.setAttribute("userAddFail", "User could not be added");
             }
 
+
             if (userAdded) {
+
                 user.setPassword(null);
                 user.setCreatedAt(Instant.now());
                 HttpSession session = req.getSession();

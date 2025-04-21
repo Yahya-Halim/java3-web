@@ -275,6 +275,25 @@ public class UserDAO {
             return false;
         }
     }
+    public static List<Plan> getPlans() {
+        List<Plan> plans = new ArrayList<>();
+        try (Connection conn = getConnection();
+             CallableStatement stmt = conn.prepareCall("{CALL sp_get_plans()}")) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Plan plan = new Plan(
+                        rs.getInt("plan_id"),
+                        rs.getString("name"),
+                        rs.getBigDecimal("price"),
+                        rs.getString("description")
+                );
+                plans.add(plan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return plans;
+    }
 
     public static void insertBlog(int userId, String postContent) {
         String sql = "{CALL sp_insert_blog(?, ?)}";
