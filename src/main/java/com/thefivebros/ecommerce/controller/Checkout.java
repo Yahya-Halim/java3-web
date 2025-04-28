@@ -1,5 +1,6 @@
 package com.thefivebros.ecommerce.controller;
 
+import com.thefivebros.ecommerce.model.OrderDAO;
 import com.thefivebros.ecommerce.model.ShoppingCart;
 import com.thefivebros.shared.authorize_net.ChargeCreditCard;
 import jakarta.servlet.ServletException;
@@ -72,13 +73,25 @@ public class Checkout extends HttpServlet {
             HttpSession session = req.getSession();
             ShoppingCart cart = (ShoppingCart)session.getAttribute("cart");
             if(cart != null) {
-                Double amount = cart.getTotalPrice();
-                String response = ChargeCreditCard.run(amount, ccInfo, billingInfo, shippingInfo, email, sameAddress);
-                // Parse the response to determine results
-                if (response.contains("Success")) {
-                    session.setAttribute("flashMessageSuccess", response);
+                int newOrderId = OrderDAO.addOrder(shippingInfo, email, cart.toString());
+                if(newOrderId > 0) {
+                    // The order was added
+                    Double amount = cart.getTotalPrice();
+                    String response = ChargeCreditCard.run(amount, ccInfo, billingInfo, shippingInfo, email, sameAddress);
+                    // Parse the response to determine results
+                    if (response.contains("Success")) {
+                        session.removeAttribute("cart");
+                        session.setAttribute("newOrderId", newOrderId);
+                        //Send a confirmation email
+                        session.setAttribute("flashMessageSuccess", response);
+                        resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/order-confirmation"));
+                        return;
+                    } else {
+                        session.setAttribute("flashMessageDanger", response);
+                    }
                 } else {
-                    session.setAttribute("flashMessageDanger", response);
+                    // Order failed in database
+                    session.setAttribute("flashMessageDanger", "Your order could not be processed.");
                 }
             } else {
                 // Cart doesn't exist

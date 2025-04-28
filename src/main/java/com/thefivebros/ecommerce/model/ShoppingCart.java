@@ -29,6 +29,7 @@ public class ShoppingCart {
         }
         contents.put(product, quantity);
     }
+
     public void deleteProduct(Product product) {
         if(product == null) {
             throw new IllegalArgumentException("Product cannot be null");
@@ -37,6 +38,7 @@ public class ShoppingCart {
             contents.remove(product);
         }
     }
+
     public Map<Product, Integer> getContents() {
         return contents;
     }
@@ -55,9 +57,24 @@ public class ShoppingCart {
         for(Map.Entry<Product, Integer> entry: contents.entrySet()) {
             Product product = entry.getKey();
             int quantity = entry.getValue();
-            total += product.getPrice() * quantity;
+            double price = product.getPrice();
+            total += quantity * price;
         }
         return total;
+    }
+
+    @Override
+    public String toString() {
+        String json = "[";
+        for(Map.Entry<Product, Integer> entry: contents.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+            json += "{";
+            json += String.format("\"prod_id\": \"%s\", \"quantity\": %d, \"price\": %.2f", product.getId(), quantity, product.getPrice() );
+            json += "},";
+        }
+        json = json.substring(0, json.length() - 1) + "]";
+        return json;
     }
 
     public static void main(String[] args) {
@@ -75,8 +92,12 @@ public class ShoppingCart {
             System.out.println(item.getValue() * item.getKey().getPrice());
         });
         System.out.println("There are " + sc.getTotalProductCount() + " products in your cart");
+        System.out.println("Your total is " + sc.getTotalPrice());
+        System.out.println(sc);
+        String[] shippingInfo = new String[]{"Test", "User", "111 First Ave", "Iowa City", "IA", "55555"};
+        String email = "test@example.com";
+        int newOrderId = OrderDAO.addOrder(shippingInfo, email, sc.toString());
+        System.out.println(newOrderId);
     }
-
-
 }
 
