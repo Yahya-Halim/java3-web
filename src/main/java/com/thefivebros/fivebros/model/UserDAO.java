@@ -230,7 +230,9 @@ public class UserDAO {
             cstmt.setString(3, user.getLastName());
             cstmt.setString(4, user.getEmail());
             cstmt.setString(5, user.getPhone());
-            cstmt.setString(6, new String(user.getPassword()));
+            char[] passwordChars = user.getPassword();
+            String passwordString = (passwordChars != null) ? new String(passwordChars) : "";
+            cstmt.setString(6, passwordString);
             cstmt.setString(7, user.getLanguage());
             cstmt.setString(8, user.getStatus());
             cstmt.setString(9, user.getPrivileges());

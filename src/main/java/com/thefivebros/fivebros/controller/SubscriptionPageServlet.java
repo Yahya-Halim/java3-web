@@ -35,25 +35,29 @@ public class SubscriptionPageServlet extends HttpServlet {
 
         // You probably want to store user update logic here
         if (user != null) {
-            // Update the user with chosen plan (e.g. premium)
             String plan = req.getParameter("plan");
 
-            // Optionally store it in DB here...
-            // user.setPlan(plan);
-            // UserDAO.update(user);
+            if ("premium".equalsIgnoreCase(plan) && "user".equalsIgnoreCase(user.getPrivileges())) {
+                user.setPrivileges("premium");
 
-            user.setCreatedAt(Instant.now());
-            session.setAttribute("activeUser", user);
-            session.setAttribute("flashMessageSuccess", "Subscription plan selected");
+                boolean updated = UserDAO.userUpdate(user.getEmail(), user);
 
-            if ("premium".equalsIgnoreCase(plan)) {
-                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/ecommerce/checkout"));
+                if (updated) {
+                    session.setAttribute("activeUser", user);
+                    session.setAttribute("flashMessageSuccess", "Subscription plan selected successfully.");
+                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/edit-profile"));
+                } else {
+                    session.setAttribute("flashMessageDanger", "Subscription update failed. Please try again.");
+                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/subscription"));
+                }
             } else {
-                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
+                session.setAttribute("flashMessageDanger", "Invalid plan selection or already subscribed.");
+                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/subscription"));
             }
         } else {
             session.setAttribute("flashMessageError", "No active user session found. Please sign up or log in.");
-            resp.sendRedirect(req.getContextPath() + "/signup");
+            resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/login?redirect=subscription"));
         }
+
     }
 }
