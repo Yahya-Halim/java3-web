@@ -2,6 +2,7 @@ package com.thefivebros.ecommerce.model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.thefivebros.shared.MySQL_Connect.getConnection;
@@ -13,13 +14,13 @@ public class ProductDAO{
     }
 
     // This method get products for the Shop page.
-    public static List<Product> getProducts(int limit, int offset, String categories, Double minPrice, Double maxPrice, String sort) {
+    public static List<Product> getProducts(int limit, int offset, String categories, Double minPrice, Double maxPrice, String sort, String search) {
         List<Product> products = new ArrayList<>();
         try (Connection connection = getConnection()) {
-            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?, ?, ?, ?, ?)}");
+            CallableStatement statement = connection.prepareCall("{CALL sp_get_all_products(?, ?, ?, ?, ?, ?)}");
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            statement.setString(3, categories);
+            statement.setString(3, categories != null ? categories : "");
 
             if (minPrice != null) {
                 statement.setDouble(4, minPrice);
@@ -33,6 +34,8 @@ public class ProductDAO{
                 statement.setNull(5, Types.DECIMAL);
             }
 
+            statement.setString(6, search != null ? search : "");
+
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 String id = rs.getString("prod_id");
@@ -44,9 +47,9 @@ public class ProductDAO{
                 products.add(new Product(id, name, price, description, categoryId, categoryName));
             }
 
-            // Apply sorting AFTER fetching data
+            // Sort in Java (if required)
             if ("az".equalsIgnoreCase(sort)) {
-                products.sort((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()));
+                products.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
             } else if ("za".equalsIgnoreCase(sort)) {
                 products.sort((p1, p2) -> p2.getName().compareToIgnoreCase(p1.getName()));
             }
@@ -56,6 +59,7 @@ public class ProductDAO{
         }
         return products;
     }
+
 
 
     // This method get products for the Admin page.

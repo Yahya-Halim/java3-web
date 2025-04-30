@@ -18,6 +18,7 @@ public class Shop extends HttpServlet {
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sort = req.getParameter("sort");
         req.setAttribute("sort", sort);
+        String search = req.getParameter("search");
 
 
 
@@ -91,7 +92,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
         }
         req.setAttribute("lastProductShown", lastProductShown);
 
-        List<Product> products = ProductDAO.getProducts(limit, offset, categories, minPrice, maxPrice, sort);
+        List<Product> products = ProductDAO.getProducts(limit, offset, categories, minPrice, maxPrice, sort, search);
         req.setAttribute("products", products);
         List<ProductCategory> productCategories = ProductDAO.getAllCategories();
         req.setAttribute("productCategories", productCategories);
