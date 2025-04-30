@@ -21,6 +21,7 @@
           <li><a class="dropdown-item" href="${appURL}/vendors">All Vendors</a></li>
           <li><a class="dropdown-item" href="${appURL}/products">All Products</a></li>
           <li><a class="dropdown-item" href="${appURL}/orders">All Orders</a></li>
+          <li><a class="dropdown-item" href="${appURL}/admin-plans">All Plans</a></li>
         </ul>
       </li>
     </c:if>
