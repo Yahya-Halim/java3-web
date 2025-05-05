@@ -1,32 +1,54 @@
-<%-- Build queryParams to retain filters across pagination --%>
-<c:set var="queryParams" value="&search=${fn:escapeXml(param.search)}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&sort=${param.sort}&limit=${param.limit}" />
+
+
+<%-- Initialize queryParams with safe values --%>
+<c:set var="queryParams" value="" />
+<c:if test="${not empty param.search}">
+    <c:set var="queryParams" value="${queryParams}&search=${fn:escapeXml(param.search)}" />
+</c:if>
+<c:if test="${not empty param.minPrice}">
+    <c:set var="queryParams" value="${queryParams}&minPrice=${param.minPrice}" />
+</c:if>
+<c:if test="${not empty param.maxPrice}">
+    <c:set var="queryParams" value="${queryParams}&maxPrice=${param.maxPrice}" />
+</c:if>
+<c:if test="${not empty param.sort}">
+    <c:set var="queryParams" value="${queryParams}&sort=${param.sort}" />
+</c:if>
+<c:if test="${not empty param.limit}">
+    <c:set var="queryParams" value="${queryParams}&limit=${param.limit}" />
+</c:if>
+
+<%-- Include each selected category in queryParams --%>
 <c:forEach var="cat" items="${paramValues.categories}">
-    <c:set var="queryParams" value="${queryParams}&categories=${cat}" />
+    <c:set var="queryParams" value="${queryParams}&categories=${fn:escapeXml(cat)}" />
 </c:forEach>
 
+<%-- Render pagination --%>
 <c:if test="${totalPages gt 1}">
-<nav aria-label="...">
+<nav aria-label="Page navigation">
     <ul class="pagination">
         <c:if test="${page gt 1}">
-        <li class="page-item">
-            <a class="page-link" href="${appURL}/shop?page=1${queryParams}"><i class="bi bi-chevron-double-left"></i></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="${appURL}/shop?page=${page - 1}${queryParams}"><i class="bi bi-chevron-left"></i></a>
-        </li>
+            <li class="page-item">
+                <a class="page-link" href="${appURL}/shop?page=1${queryParams}"><i class="bi bi-chevron-double-left"></i></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="${appURL}/shop?page=${page - 1}${queryParams}"><i class="bi bi-chevron-left"></i></a>
+            </li>
         </c:if>
+
         <c:forEach var="i" begin="${beginPage}" end="${endPage}">
-        <li class="page-item <c:if test='${page eq i}'>active</c:if>'" <c:if test="${page eq i}">aria-current="page"</c:if>>
-            <a class="page-link" href="${appURL}/shop?page=${i}${queryParams}">${i}</a>
-        </li>
+            <li class="page-item ${page eq i ? 'active' : ''}" ${page eq i ? 'aria-current="page"' : ''}>
+                <a class="page-link" href="${appURL}/shop?page=${i}${queryParams}">${i}</a>
+            </li>
         </c:forEach>
+
         <c:if test="${page lt totalPages}">
-        <li class="page-item">
-            <a class="page-link" href="${appURL}/shop?page=${page + 1}${queryParams}"><i class="bi bi-chevron-right"></i></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="${appURL}/shop?page=${totalPages}${queryParams}"><i class="bi bi-chevron-double-right"></i></a>
-        </li>
+            <li class="page-item">
+                <a class="page-link" href="${appURL}/shop?page=${page + 1}${queryParams}"><i class="bi bi-chevron-right"></i></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="${appURL}/shop?page=${totalPages}${queryParams}"><i class="bi bi-chevron-double-right"></i></a>
+            </li>
         </c:if>
     </ul>
 </nav>

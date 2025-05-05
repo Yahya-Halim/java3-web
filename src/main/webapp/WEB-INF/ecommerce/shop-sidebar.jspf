@@ -1,10 +1,16 @@
 <!-- Button to Show Sidebar -->
-<button onclick="toggleSidebar()" class="w-40 h-10 fixed right-6 top-60 transform -translate-y-1/2 bg-green-500 text-white text-sm px-4 py-2 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none z-50">
+<button onclick="toggleSidebar()"
+        class="fixed h-10 w-40 right-20 top-60 md:right-20 md:top-6 bg-green-500 text-white text-sm px-4 py-2 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none z-50">
     Show Filters
 </button>
 
+<!-- Overlay -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleSidebar()"></div>
+
 <!-- Right Sidebar START -->
-<div id="sidebar" class="fixed right-0 w-1/4 h-100 bg-white shadow-lg p-4 z-50 hidden rounded-50">
+<div id="sidebar"
+    class="fixed top-0 right-0 h-full w-full sm:w-3/4 md:w-2/5 lg:w-1/4 bg-white shadow-lg p-6 z-50 hidden overflow-y-auto rounded-none sm:rounded-l-2xl transition-transform duration-300">
+
     <!-- Sidebar Header -->
     <div class="flex justify-between items-center mb-4">
         <h5 class="text-lg font-semibold text-gray-800">Advanced Filter</h5>
@@ -15,7 +21,6 @@
 
     <!-- Filter Form -->
     <form method="GET" action="${appURL}/shop">
-
         <c:set var="selectedCategories" value="${paramValues.categories}" />
 
         <!-- Search Box -->
@@ -37,12 +42,7 @@
             <div class="space-y-2">
                 <c:forEach var="category" items="${productCategories}">
                     <div class="flex items-center space-x-2">
-                        <input type="checkbox"
-                               class="h-4 w-4 text-blue-500 border-gray-300 rounded"
-                               id="filter-${category.id}"
-                               name="categories"
-                               value="${category.id}"
-                               <c:if test="${selectedCategories ne null and fn:contains(selectedCategories, category.id)}">checked</c:if>>
+                         <input class="form-check-input" type="checkbox" id="filter-${category.id}" name="categories" value="${category.id}" <c:if test="${cfn:contains(categoriesArr, category.id)}">checked</c:if>>
                         <label class="text-gray-700 text-sm" for="filter-${category.id}">
                             ${category.name} (${category.numProducts})
                         </label>
@@ -111,10 +111,20 @@
 </div>
 <!-- Right Sidebar END -->
 
-<!-- Tailwind Sidebar Toggle -->
+<!-- Toggle Logic -->
 <script>
     const toggleSidebar = () => {
         const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('hidden');
+        const overlay = document.getElementById('overlay');
+
+        const isHidden = sidebar.classList.contains('hidden');
+
+        if (isHidden) {
+            sidebar.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        } else {
+            sidebar.classList.add('hidden');
+            overlay.classList.add('hidden');
+        }
     };
 </script>
