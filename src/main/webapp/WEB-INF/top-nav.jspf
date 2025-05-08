@@ -5,6 +5,19 @@
     <span class="fa-brands fa-uikit"></span>
     <span class="brand-name">THE FIVE BRO'S</span>
   </a>
+  <div class="dropdown me-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <fmt:message key="topNav.language" />
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li>
+                                <a class="dropdown-item" href="?lang=en"><span class="flag-icon flag-icon-us me-2"></span><fmt:message key="topNav.english" /></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="?lang=ar"><span class="flag-icon flag-icon-sa me-2"></span><fmt:message key="topNav.arabic" /></a>
+                            </li>
+                        </ul>
+  </div>
 
   <ul class="menu-items">
     <li><a href="${appURL}"><span class="icon fa fa-newspaper-o"></span><span class="item-name">home</span></a></li>
@@ -17,16 +30,21 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle icon fa fa-user-shield" href="#" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="${appURL}/users">All Users</a></li>
-          <li><a class="dropdown-item" href="${appURL}/vendors">All Vendors</a></li>
-          <li><a class="dropdown-item" href="${appURL}/products">All Products</a></li>
-          <li><a class="dropdown-item" href="${appURL}/orders">All Orders</a></li>
-          <li><a class="dropdown-item" href="${appURL}/admin-plans">All Plans</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/users">All Users</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/vendors">All Vendors</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/products">All Products</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/orders">All Orders</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/admin-plans">All Plans</a></li>
+          <li><a class="dropdown-item text-black" href="${appURL}/admin-doctor">All Doctor</a></li>
+
+
         </ul>
       </li>
     </c:if>
     <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'premium'}">
-      <li><a href="${appURL}/chat"><span class="icon fa fa-users"></span><span class="item-name">Chat</span></a></li>
+      <li><a href="${appURL}/articles"><span class="icon fa fa-users"></span><span class="item-name">Posts</span></a></li>
+      <li><a href="${appURL}/articles-add"><span class="icon fa fa-plus"></span><span class="item-name">Add Post</span></a></li>
+
     </c:if>
 
   </ul>
