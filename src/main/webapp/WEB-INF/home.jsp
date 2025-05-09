@@ -1,7 +1,7 @@
 <%@ page import="java.util.List, java.util.Map" %>
 
 <!-- Main Container -->
-<main class="flex-1 transition-all duration-300 ease-in-out">
+<main class="flex-1 transition-all duration-300 ease-in-out" lang="${language}" <c:if test="${language eq 'ar'}">dir="rtl"</c:if>>
   <!-- Hero Section -->
   <div class="relative p-4 md:p-8 mb-8 rounded-lg overflow-hidden bg-black border border-gray-800">
     <!-- Animated Background -->

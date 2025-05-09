@@ -49,9 +49,19 @@ public class SubscriptionPageServlet extends HttpServlet {
                     session.setAttribute("flashMessageDanger", "Subscription update failed. Please try again.");
                     resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/subscription"));
                 }
-            } else {
-                session.setAttribute("flashMessageDanger", "Invalid plan selection or already subscribed.");
-                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/subscription"));
+            } else if ("user".equalsIgnoreCase(plan) && "premium".equalsIgnoreCase(user.getPrivileges())) {
+                user.setPrivileges("user");
+                boolean updated = UserDAO.userUpdate(user.getEmail(), user);
+
+                if (updated) {
+                    session.setAttribute("activeUser", user);
+                    session.setAttribute("flashMessageSuccess", "Subscription plan is now free.");
+                } else {
+                    session.setAttribute("flashMessageDanger", "Invalid plan selection or already subscribed.");
+                    resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/subscription"));
+
+                }
+
             }
         } else {
             session.setAttribute("flashMessageError", "No active user session found. Please sign up or log in.");

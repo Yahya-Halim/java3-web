@@ -89,6 +89,17 @@
                     <div class="invalid-feedback">${timeZoneError}</div>
                   </c:if>
                 </div>
+                                <!-- Select option -->
+                                <div class="col-md-6">
+                                    <!-- Language Preference -->
+                                    <label class="form-label" for="language">Language</label>
+                                    <select class="<c:if test="${not empty languageError}">is-invalid</c:if> form-select js-choice z-index-9 bg-transparent" aria-label=".form-select-sm" id="language" name="language">
+                                        <option value="en" ${sessionScope.activeUser.language == 'en' ? 'selected' : ''}>English</option>
+                                        <option value="ar" ${sessionScope.activeUser.language == 'ar' ? 'selected' : ''}>Arabic</option>
+                                        <option value="fr" <c:if test="${sessionScope.activeUser.language == 'fr'}">selected</c:if> >French</option>
+                                    </select>
+                                    <c:if test="${not empty languageError }"><div class="invalid-feedback">${languageError}</div></c:if>
+                                </div>
 
                 
 
