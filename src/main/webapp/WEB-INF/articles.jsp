@@ -10,10 +10,12 @@
       <h1 class="text-4xl md:text-6xl font-bold italic bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400 animate-textGlow">Latest News</h1>
       <p class="text-lg text-teal-300 mt-2">Post our latest news and updates here as premium user</p>
       <div class="mt-6">
+      <c:if test="${not empty sessionScope.activeUser && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'premium'}">
         <a href="${appURL}/articles-add"
            class="inline-block bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
           + Add New Article
         </a>
+      </c:if>
       </div>
     </div>
   </div>
@@ -34,12 +36,14 @@
                 <div class="flex flex-wrap gap-2">
                   <a href="${article.articleUrl}" target="_blank"
                      class="text-blue-400 hover:text-blue-200 font-semibold">Read More</a>
-                  <a href="${appURL}/articles-edit?id=${article.articleId}"
-                     class="text-yellow-400 hover:text-yellow-200 font-semibold">Edit</a>
-                  <form action="${appURL}/articles-delete" method="post" class="inline">
-                    <input type="hidden" name="id" value="${article.articleId}">
-                    <button type="submit" class="text-red-400 hover:text-red-200 font-semibold">Delete</button>
-                  </form>
+                  <c:if test="${not empty sessionScope.activeUser.userId  && sessionScope.activeUser.status == 'active' && sessionScope.activeUser.privileges == 'premium'}">
+                      <a href="${appURL}/articles-edit?id=${article.articleId}"
+                         class="text-yellow-400 hover:text-yellow-200 font-semibold">Edit</a>
+                      <form action="${appURL}/articles-delete" method="post" class="inline">
+                        <input type="hidden" name="id" value="${article.articleId}">
+                        <button type="submit" class="text-red-400 hover:text-red-200 font-semibold">Delete</button>
+                      </form>
+                  </c:if>
                 </div>
               </div>
             </div>

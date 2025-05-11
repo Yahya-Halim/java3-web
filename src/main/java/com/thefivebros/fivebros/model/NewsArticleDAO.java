@@ -63,7 +63,7 @@ public class NewsArticleDAO {
 
 
 
-    public boolean addNewsArticle(int userId, String title, String description, String url, String image) {
+    public static boolean addNewsArticle(int userId, String title, String description, String url, String image) {
 
 
         try (Connection conn = getConnection()) {

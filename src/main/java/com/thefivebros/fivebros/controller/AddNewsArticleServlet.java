@@ -14,58 +14,81 @@ import java.io.IOException;
 public class AddNewsArticleServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("activeUser");
 
-        // Check if user is logged in and has premium privileges
-        if (user == null || !"premium".equals(user.getPrivileges())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (user == null || !"active".equals(user.getStatus()) || !"premium".equals(user.getPrivileges())) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        request.setAttribute("appURL", request.getContextPath());
-        request.getRequestDispatcher("/WEB-INF/add-articles.jsp").forward(request, response);
+        req.setAttribute("appURL", req.getContextPath());
+        req.getRequestDispatcher("/WEB-INF/add-articles.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("activeUser");
 
-        // Check authorization
-        if (user == null || !"premium".equals(user.getPrivileges())) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (user == null || !"active".equals(user.getStatus()) || !"premium".equals(user.getPrivileges())) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         // Get form parameters
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String url = request.getParameter("url");
-        String image = request.getParameter("image");
+        String title = req.getParameter("title");
+        String description = req.getParameter("description");
+        String url = req.getParameter("url");
+        String image = req.getParameter("image");
 
         // Basic validation
-        if (title == null || title.trim().isEmpty() ||
-                description == null || description.trim().isEmpty() ||
-                url == null || url.trim().isEmpty()) {
+        boolean validationError = false;
 
-            request.setAttribute("error", "Title, description, and URL are required fields");
-
-            return;
+        if (title == null || title.trim().isEmpty()) {
+            validationError = true;
+            req.setAttribute("titleError", "Title is required");
         }
 
-        // Add article using the logged-in user's ID
-        NewsArticleDAO dao = new NewsArticleDAO();
-        boolean success = dao.addNewsArticle(user.getUserId(), title, description, url, image);
-
-        if (success) {
-            response.sendRedirect(request.getContextPath() + "/articles");
-        } else {
-            request.setAttribute("error", "Failed to add article. Please try again.");
-
+        if (description == null || description.trim().isEmpty()) {
+            validationError = true;
+            req.setAttribute("descriptionError", "Description is required");
         }
-        request.setAttribute("appURL", request.getContextPath());
-        request.getRequestDispatcher("/WEB-INF/articles.jsp").forward(request, response);
+
+        if (url == null || url.trim().isEmpty()) {
+            validationError = true;
+            req.setAttribute("urlError", "URL is required");
+        }
+
+        // Repopulate form fields
+        req.setAttribute("title", title);
+        req.setAttribute("description", description);
+        req.setAttribute("url", url);
+        req.setAttribute("image", image);
+
+        // Add to database if no validation errors
+        boolean articleAdded = false;
+        if (!validationError) {
+            articleAdded = NewsArticleDAO.addNewsArticle(
+                    user.getUserId(),
+                    title.trim(),
+                    description.trim(),
+                    url.trim(),
+                    image != null ? image.trim() : null
+            );
+
+            if (articleAdded == true) {
+                req.setAttribute("successMessage", "Article added successfully!");
+                resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/articles"));
+                return;
+            } else {
+                req.setAttribute("formError", true);
+                req.setAttribute("formMessage", "Failed to add article. Please try again.");
+            }
+        }
+
+        req.setAttribute("appURL", req.getContextPath());
+        req.getRequestDispatcher("/WEB-INF/add-articles.jsp").forward(req, resp);
     }
 }
