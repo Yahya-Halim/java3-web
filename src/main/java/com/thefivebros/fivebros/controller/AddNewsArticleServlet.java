@@ -19,7 +19,7 @@ public class AddNewsArticleServlet extends HttpServlet {
         User user = (User) session.getAttribute("activeUser");
 
         if (user == null || !"active".equals(user.getStatus()) || !"premium".equals(user.getPrivileges())) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -33,7 +33,7 @@ public class AddNewsArticleServlet extends HttpServlet {
         User user = (User) session.getAttribute("activeUser");
 
         if (user == null || !"active".equals(user.getStatus()) || !"premium".equals(user.getPrivileges())) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -66,20 +66,18 @@ public class AddNewsArticleServlet extends HttpServlet {
         req.setAttribute("description", description);
         req.setAttribute("url", url);
         req.setAttribute("image", image);
-
-        // Add to database if no validation errors
         boolean articleAdded = false;
         if (!validationError) {
             articleAdded = NewsArticleDAO.addNewsArticle(
-                    user.getUserId(),
+
                     title.trim(),
                     description.trim(),
                     url.trim(),
                     image != null ? image.trim() : null
             );
 
-            if (articleAdded == true) {
-                req.setAttribute("successMessage", "Article added successfully!");
+            if (articleAdded = true) {
+                req.getSession().setAttribute("successMessage", "Article added successfully!");
                 resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/articles"));
                 return;
             } else {

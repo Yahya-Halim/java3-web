@@ -8,6 +8,15 @@ import static com.thefivebros.shared.MySQL_Connect.getConnection;
 
 public class NewsArticleDAO {
 
+    public static void main(String[] args) {
+        try {
+            boolean added = addNewsArticle("test", "test2", "test3", null);
+            System.out.println("Success: " + added);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
     public List<NewsArticle> getAllNewsArticles() {
         List<NewsArticle> articles = new ArrayList<>();
 
@@ -63,17 +72,16 @@ public class NewsArticleDAO {
 
 
 
-    public static boolean addNewsArticle(int userId, String title, String description, String url, String image) {
+    public static boolean addNewsArticle(String title, String description, String url, String image) {
 
 
         try (Connection conn = getConnection()) {
-            String query = "{CALL sp_add_news_article(?, ?, ?, ?, ?)}";
+            String query = "{CALL sp_add_news_article(?, ?, ?, ?)}";
             try (CallableStatement stmt = conn.prepareCall(query)) {
-                stmt.setInt(1, userId);
-                stmt.setString(2, title);
-                stmt.setString(3, description);
-                stmt.setString(4, url);
-                stmt.setString(5, image != null ? image : "");
+                stmt.setString(1, title);
+                stmt.setString(2, description);
+                stmt.setString(3, url);
+                stmt.setString(4, image != null ? image : "");
 
                 stmt.execute();
                 return true;
