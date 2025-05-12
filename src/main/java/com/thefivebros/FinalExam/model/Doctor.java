@@ -47,6 +47,9 @@ public class Doctor {
     public String[] getSpecialties() {
         return specialties;
     }
+    public String getSpecialties2() {
+        return Arrays.toString(specialties);
+    }
 
     public void setSpecialties(String[] specialties) {
         this.specialties = specialties;
